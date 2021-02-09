@@ -7,6 +7,7 @@ public class JRpcTransaction {
     private final JRpcRequest request;
     private JRpcResponse response;
     private final long startTime;
+    private boolean failed = false;
 
     public JRpcTransaction(JRpcRequest request) {
         this.request = request;
@@ -37,19 +38,35 @@ public class JRpcTransaction {
         return this.response != null;
     }
 
+    public boolean hasFailed() {
+        return this.failed;
+    }
+
     public String generateRequest(boolean named) {
         if (this.request == null) return null;
         return this.request.generateString(named);
     }
 
+    public void fail() {
+        if (isDone()) return;
+        this.failed = true;
+    }
+
     public void setResponse(String msg) {
-        if (msg == null) return;
+        if (msg == null) {
+            fail();
+            return;
+        }
         if (isDone()) return;
         try {
             JRpcResponse response = new JRpcResponse(new JSONObject(msg));
-            if (response.getId() != this.request.getId()) return;
+            if (response.getId() != this.request.getId()) {
+                fail();
+                return;
+            }
             this.response = response;
         } catch (NullPointerException | JSONException ignore){
+            fail();
         }
     }
 }

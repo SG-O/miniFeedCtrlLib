@@ -66,6 +66,7 @@ public class JRpcTransactionHandler {
                     transactions.remove(entry.getKey());
                 }
                 if (entry.getValue().getElapsedTime() > timeout) {
+                    entry.getValue().fail();
                     transactions.remove(entry.getKey());
                 }
             }
