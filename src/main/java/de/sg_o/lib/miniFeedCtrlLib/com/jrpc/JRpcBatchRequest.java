@@ -16,7 +16,7 @@ public class JRpcBatchRequest {
     public JRpcBatchRequest(JRpcRequest request, boolean named) {
         this.firstID = -1;
         if (request == null) return;
-        this.requests.put(request.generate(named));
+        this.requests.put(request.generateJSON(named));
         this.firstID = request.getId();
     }
 
@@ -34,7 +34,7 @@ public class JRpcBatchRequest {
 
     public void addRequests(JRpcRequest request, boolean named) {
         if (request == null) return;
-        this.requests.put(request.generate(named));
+        this.requests.put(request.generateJSON(named));
         if (this.firstID < 0) {
             this.firstID = request.getId();
         }

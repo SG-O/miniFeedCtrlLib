@@ -65,7 +65,7 @@ public class JRpcRequest {
         this.orderedData.put(data);
     }
 
-    public JSONObject generate(boolean named) {
+    public JSONObject generateJSON(boolean named) {
         final JSONObject msg = new JSONObject();
         msg.put("jsonrpc", "2.0");
         msg.put("method", this.method);
@@ -79,7 +79,7 @@ public class JRpcRequest {
     }
 
     public String generateString(boolean named) {
-        return generate(named).toString();
+        return generateJSON(named).toString();
     }
 
     @Override
