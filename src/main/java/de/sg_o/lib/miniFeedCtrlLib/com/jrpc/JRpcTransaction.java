@@ -33,6 +33,7 @@ public class JRpcTransaction {
     }
 
     public boolean isDone() {
+        if (this.failed) return false;
         if (this.request == null) return true;
         if (this.request.getId() < 1) return true;
         return this.response != null;
