@@ -1,43 +1,30 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
+import de.sg_o.lib.miniFeedCtrlLib.com.Response;
+import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class JRpcResponse {
-    public enum ResultType {
-        ERROR,
-        LONG,
-        DOUBLE,
-        BOOLEAN,
-        NULL,
-        STRING,
-        ARRAY,
-        OBJECT,
-        BIGINT,
-        BIGDECIMAL
-    }
-
-    private int id;
-    private JRpcError error;
+public class JRpcResponse extends Response {
     private JSONArray result = new JSONArray();
-    private ResultType resultType = ResultType.ERROR;
 
     public JRpcResponse(int id) {
-        if (id < 1) id = -1;
-        this.id = id;
+        super(id);
     }
 
     public JRpcResponse(JSONObject msg) {
+        super(-1);
         if (msg == null) throw new NullPointerException();
         if (!msg.has("jsonrpc")) throw new JSONException("Not a JSON RPC message");
-        this.id = msg.optInt("id", -1);
+        super.setId(msg.optInt("id", -1));
         if (msg.has("error")) {
-            this.error = new JRpcError(msg.optJSONObject("error"));
+            super.setError(SystemError.UNKNOWN);
         } else {
             parseResult(msg);
         }
@@ -45,10 +32,10 @@ public class JRpcResponse {
 
     private void parseResult(JSONObject msg) {
         if (!msg.has("result")) {
-            this.error = new JRpcError(null);
+            super.setError(SystemError.UNKNOWN);
             return;
         }
-        this.error = null;
+        super.setError(SystemError.NO_ERROR);
         JSONArray tmpA = msg.optJSONArray("result");
         if (tmpA != null) {
             this.result = tmpA;
@@ -64,47 +51,35 @@ public class JRpcResponse {
 
     private void parseResultType() {
         if (result.length() > 1) {
-            this.resultType = ResultType.ARRAY;
+            super.setResultType(ResultType.ARRAY);
             return;
         }
-        this.resultType = parseType(result.opt(0));
+        super.setResultType(parseType(result.opt(0)));
 
-    }
-
-    public boolean isError() {
-        return error != null;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public JRpcError getError() {
-        return error;
     }
 
     public JSONArray getResult() {
-        if (isError()) return null;
+        if (super.isError()) return null;
         return result;
     }
 
     public ResultType getResultType() {
-        if (isError()) return ResultType.ERROR;
-        return resultType;
+        if (super.isError()) return ResultType.ERROR;
+        return super.getResultType();
     }
 
-    public long getAsLong() {
-        if (resultType != ResultType.LONG) return 0;
+    public long getResultAsLong() {
+        if (super.getResultType() != ResultType.LONG) return 0;
         return result.optLong(0, 0);
     }
 
-    public String getAsString() {
-        if (resultType != ResultType.STRING) return null;
+    public String getResultAsString() {
+        if (super.getResultType() != ResultType.STRING) return null;
         return result.optString(0);
     }
 
-    public long[] getAsLongArray() {
-        if (resultType != ResultType.ARRAY) return null;
+    public long[] getResultAsLongArray() {
+        if (super.getResultType() != ResultType.ARRAY) return null;
         long[] longs = new long[result.length()];
         for(int i = 0; i < result.length(); i++) {
             if (parseType(result.opt(i)) != ResultType.LONG) {
@@ -115,8 +90,8 @@ public class JRpcResponse {
         return longs;
     }
 
-    public byte[] getAsByteArray() {
-        if (resultType != ResultType.ARRAY) return null;
+    public byte[] getResultAsByteArray() {
+        if (super.getResultType() != ResultType.ARRAY) return null;
         byte[] longs = new byte[result.length()];
         for(int i = 0; i < result.length(); i++) {
             if (parseType(result.opt(i)) != ResultType.LONG) {
@@ -127,8 +102,8 @@ public class JRpcResponse {
         return longs;
     }
 
-    public short[] getAsShortArray() {
-        if (resultType != ResultType.ARRAY) return null;
+    public short[] getResultAsShortArray() {
+        if (super.getResultType() != ResultType.ARRAY) return null;
         short[] longs = new short[result.length()];
         for(int i = 0; i < result.length(); i++) {
             if (parseType(result.opt(i)) != ResultType.LONG) {
@@ -139,8 +114,8 @@ public class JRpcResponse {
         return longs;
     }
 
-    public int[] getAsIntArray() {
-        if (resultType != ResultType.ARRAY) return null;
+    public int[] getResultAsIntArray() {
+        if (super.getResultType() != ResultType.ARRAY) return null;
         int[] longs = new int[result.length()];
         for(int i = 0; i < result.length(); i++) {
             if (parseType(result.opt(i)) != ResultType.LONG) {
@@ -151,21 +126,25 @@ public class JRpcResponse {
         return longs;
     }
 
-    public JSONObject generate() {
+    public JSONObject generateJSON() {
         final JSONObject msg = new JSONObject();
         msg.put("jsonrpc", "2.0");
         if (isError()) {
-            msg.put("error", error.generate());
+            msg.put("error", super.getError().getCode());
         } else {
             msg.put("result", this.result);
         }
-        if (this.id < 1) return null;
-        msg.put("id", this.id);
+        if (super.getId() < 1) return null;
+        msg.put("id", super.getId());
         return msg;
     }
 
     public String generateString() {
-        return generate().toString();
+        return generateJSON().toString();
+    }
+
+    public byte[] generate() {
+        return generateString().getBytes(StandardCharsets.ISO_8859_1);
     }
 
     @Override
@@ -184,8 +163,8 @@ public class JRpcResponse {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Response{");
-        sb.append("id=").append(id);
-        sb.append(", error=").append(error);
+        sb.append("id=").append(super.getId());
+        sb.append(", error=").append(super.getError());
         sb.append(", result=").append(result);
         sb.append('}');
         return sb.toString();

@@ -1,5 +1,6 @@
 package de.sg_o.lib.miniFeedCtrlLib.base;
 
+import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import de.sg_o.lib.miniFeedCtrlLib.common.InvalidDataException;
 
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public class Mainboard {
     private short protocolVersion;
 
     private Status status;
-    private Error error;
+    private SystemError error;
 
     public Mainboard(int[] id) throws InvalidDataException {
         if (id == null) throw new InvalidDataException("ID(null)", 3, -1);;
@@ -39,7 +40,7 @@ public class Mainboard {
         this.status = status;
     }
 
-    public void setError(Error error) {
+    public void setError(SystemError error) {
         this.error = error;
     }
 
@@ -69,7 +70,7 @@ public class Mainboard {
         return status;
     }
 
-    public Error getError() {
+    public SystemError getError() {
         return error;
     }
 

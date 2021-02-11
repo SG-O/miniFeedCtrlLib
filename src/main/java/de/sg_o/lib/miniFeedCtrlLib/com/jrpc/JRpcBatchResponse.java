@@ -16,7 +16,7 @@ public class JRpcBatchResponse {
     public JRpcBatchResponse(JRpcResponse response) {
         this.firstID = -1;
         if (response == null) return;
-        this.responses.put(response.generate());
+        this.responses.put(response.generateJSON());
         this.firstID = response.getId();
     }
 
@@ -34,7 +34,7 @@ public class JRpcBatchResponse {
 
     public void addResponse(JRpcResponse response) {
         if (response == null) return;
-        this.responses.put(response.generate());
+        this.responses.put(response.generateJSON());
         if (this.firstID < 0) {
             this.firstID = response.getId();
         }

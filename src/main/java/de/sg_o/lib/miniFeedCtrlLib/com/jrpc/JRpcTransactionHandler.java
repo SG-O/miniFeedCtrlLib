@@ -1,85 +1,34 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
+import de.sg_o.lib.miniFeedCtrlLib.com.Method;
+import de.sg_o.lib.miniFeedCtrlLib.com.Request;
+import de.sg_o.lib.miniFeedCtrlLib.com.TransactionHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
 
-public class JRpcTransactionHandler {
-    private final LinkedList<JRpcTransaction> toSend = new LinkedList<>();
-    private final HashMap<Integer, JRpcTransaction> transactions = new HashMap<>();
-    private int counter = 1;
+public class JRpcTransactionHandler extends TransactionHandler {
 
-    public JRpcTransactionHandler() {
+    public Request generateRequest(Method method) {
+        return new JRpcRequest(super.getAndIncCounter(), method);
     }
 
-    public JRpcTransaction putRequest(JRpcRequest request) {
-        JRpcTransaction trans = new JRpcTransaction(request);
-        if (trans.isDone()) {
-            synchronized(this) {
-                toSend.add(trans);
-            }
-            return trans;
-        }
-        if (transactions.containsKey(request.getId())) return null;
-        synchronized(this) {
-            toSend.add(trans);
-            transactions.put(trans.getId(), trans);
-        }
-        return trans;
+    @Override
+    public Request generateRequest(int id, Method method) {
+        return new JRpcRequest(id, method);
     }
 
-    public void parseResponse(String msg) {
+    public void parseResponse(byte[] msg) {
         try {
-            JSONObject response = new JSONObject(msg);
-            int id = response.optInt("id", -1);
+            if (msg == null) throw new NullPointerException();
+            String msgStrg = new String(msg, StandardCharsets.ISO_8859_1);
+            JSONObject responseObject = new JSONObject(msgStrg);
+            int id = responseObject.optInt("id", -1);
             if (id < 1) return;
-            synchronized(this) {
-                if (transactions.containsKey(id)) {
-                    transactions.get(id).setResponse(msg);
-                    transactions.remove(id);
-                }
-            }
+            JRpcResponse response = new JRpcResponse(responseObject);
+            super.removeTransaction(id).setResponse(response);
         } catch (NullPointerException | JSONException ignore){
         }
-    }
-
-    public int nrToSend() {
-        synchronized(this) {
-            return toSend.size();
-        }
-    }
-
-    public JRpcTransaction getNextToSend() {
-        synchronized(this) {
-            if (toSend.size() < 1) return null;
-            return toSend.remove();
-        }
-    }
-
-    public void CheckTimeouts(long timeout) {
-        synchronized(this) {
-            for (Map.Entry<Integer, JRpcTransaction> entry : transactions.entrySet()) {
-                if (entry.getValue().isDone()) {
-                    transactions.remove(entry.getKey());
-                }
-                if (entry.getValue().getElapsedTime() > timeout) {
-                    entry.getValue().fail();
-                    transactions.remove(entry.getKey());
-                }
-            }
-        }
-    }
-
-    public int getAndIncCounter() {
-        int tmp;
-        synchronized(this) {
-            tmp = this.counter;
-            if (this.counter == Integer.MAX_VALUE) this.counter = 0;
-            this.counter++;
-        }
-        return tmp;
     }
 }

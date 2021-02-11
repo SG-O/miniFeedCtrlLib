@@ -11,6 +11,6 @@ class JRpcResponseTest {
     @Test
     void generateTest() {
         JRpcResponse r0 = new JRpcResponse(new JSONObject("{\"result\":{\"test\":123},\"id\":10,\"jsonrpc\":\"2.0\"}"));
-        assertEquals("Response{id=10, error=null, result=[{\"test\":123}]}", r0.toString());
+        assertEquals("Response{id=10, error=NO_ERROR, result=[{\"test\":123}]}", r0.toString());
     }
 }

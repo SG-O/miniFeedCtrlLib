@@ -13,10 +13,10 @@ public class JRpcBatchRequest {
         this.firstID = -1;
     }
 
-    public JRpcBatchRequest(JRpcRequest request, boolean named) {
+    public JRpcBatchRequest(JRpcRequest request) {
         this.firstID = -1;
         if (request == null) return;
-        this.requests.put(request.generateJSON(named));
+        this.requests.put(request.generateJSON());
         this.firstID = request.getId();
     }
 
@@ -32,9 +32,9 @@ public class JRpcBatchRequest {
         }
     }
 
-    public void addRequests(JRpcRequest request, boolean named) {
+    public void addRequests(JRpcRequest request) {
         if (request == null) return;
-        this.requests.put(request.generateJSON(named));
+        this.requests.put(request.generateJSON());
         if (this.firstID < 0) {
             this.firstID = request.getId();
         }

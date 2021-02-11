@@ -1,5 +1,6 @@
 package de.sg_o.lib.miniFeedCtrlLib.base;
 
+import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import de.sg_o.lib.miniFeedCtrlLib.common.InvalidDataException;
 
 import java.util.Arrays;
@@ -16,7 +17,7 @@ public class Feeder {
     private short protocolVersion;
 
     private Status status;
-    private Error error;
+    private SystemError error;
 
     private int remainingParts;
     private int totalParts;
@@ -57,7 +58,7 @@ public class Feeder {
         this.status = status;
     }
 
-    public void setError(Error error) {
+    public void setError(SystemError error) {
         this.error = error;
     }
 
@@ -147,7 +148,7 @@ public class Feeder {
         return status;
     }
 
-    public Error getError() {
+    public SystemError getError() {
         return error;
     }
 

@@ -1,5 +1,6 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpcTest;
 
+import de.sg_o.lib.miniFeedCtrlLib.com.Method;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcBatchRequest;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcRequest;
 import org.json.JSONArray;
@@ -11,20 +12,20 @@ class JRpcBatchRequestTest {
 
     @Test
     void generateTest() {
-        JRpcRequest r0 = new JRpcRequest(3, "test123");
+        JRpcRequest r0 = new JRpcRequest(3, Method.MAINBOARD_RUN_SELF_TEST);
         r0.addDataNumber("data1", 10);
         r0.addDataString("data2", "abc");
 
-        JRpcRequest r1 = new JRpcRequest(4, "test456");
+        JRpcRequest r1 = new JRpcRequest(4, Method.FEEDER_SET_LONG_ID);
         r1.addDataString("data3", "foo");
         r1.addDataNumber("data4", -13);
 
         JRpcBatchRequest br0 = new JRpcBatchRequest();
-        br0.addRequests(r0, false);
-        br0.addRequests(r1, false);
+        br0.addRequests(r0);
+        br0.addRequests(r1);
 
-        JRpcBatchRequest br1 = new JRpcBatchRequest(r0, true);
-        br1.addRequests(r1, false);
+        JRpcBatchRequest br1 = new JRpcBatchRequest(r0);
+        br1.addRequests(r1);
 
         JRpcBatchRequest br2 = new JRpcBatchRequest(br0.generate());
         JRpcBatchRequest br3 = new JRpcBatchRequest(br1.generate());

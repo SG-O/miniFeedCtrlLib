@@ -1,6 +1,6 @@
-package de.sg_o.lib.miniFeedCtrlLib.base;
+package de.sg_o.lib.miniFeedCtrlLib.common;
 
-public enum Error {
+public enum SystemError {
     NO_ERROR((short)0),
     UNKNOWN_ERROR((short)1),
     MOTOR_STALL((short)2),
@@ -20,11 +20,11 @@ public enum Error {
 
     private short code;
 
-    Error(short code) {
+    SystemError(short code) {
         this.code = code;
     }
 
-    public static Error fromCode(short code) {
+    public static SystemError fromCode(short code) {
         switch (code) {
             case 0:
                 return NO_ERROR;

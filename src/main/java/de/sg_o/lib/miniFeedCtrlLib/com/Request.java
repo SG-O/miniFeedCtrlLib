@@ -11,9 +11,20 @@ public abstract class Request {
         this.method = method;
     }
 
-    public Request(byte[] msg) {
-        this.id = -1;
-        this.method = Method.UNKNOWN;
+    public void setId(int id) {
+        if (id < 1) id = -1;
+        this.id = id;
+    }
+
+    public abstract void addDataNumber(String key, long data);
+
+    public abstract void addDataString(String key, String data);
+
+    public abstract void setNamedDataOutput(boolean namedDataOutput);
+
+    public void setMethod(Method method) {
+        if (method == null) this.method = Method.UNKNOWN;
+        this.method = method;
     }
 
     public int getId() {

@@ -1,252 +1,285 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc.methods;
 
-import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcRequest;
-import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcTransaction;
-import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcTransactionHandler;
+import de.sg_o.lib.miniFeedCtrlLib.com.Method;
+import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;
+import de.sg_o.lib.miniFeedCtrlLib.com.TransactionHandler;
+import de.sg_o.lib.miniFeedCtrlLib.com.Request;
 
 public class JRpcFeederMethods {
-    public static JRpcTransaction GetFeederFwVer(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederFwVer(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederFwVer");
+        Request request = handler.generateRequest(Method.FEEDER_GET_FW_VERSION);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederHwVer(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederHwVer(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederHwVer");
+        Request request = handler.generateRequest(Method.FEEDER_GET_HW_VERSION);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederID(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederID(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederID");
+        Request request = handler.generateRequest(Method.FEEDER_GET_ID);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederProtoVer(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederProtoVer(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederProtoVer");
+        Request request = handler.generateRequest(Method.FEEDER_GET_PROTOCOL_VERSION);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederStatus(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederStatus(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederStatus");
+        Request request = handler.generateRequest(Method.FEEDER_GET_STATUS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederError(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederError(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederError");
+        Request request = handler.generateRequest(Method.FEEDER_GET_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederTotalFeeds(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederTotalFeeds(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederTotalFeeds");
+        Request request = handler.generateRequest(Method.FEEDER_GET_TOTAL_FEEDS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction FeedFeeder(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction FeedFeeder(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "FeedFeeder");
+        Request request = handler.generateRequest(Method.FEEDER_FEED);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ResetFeederError(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction ResetFeederError(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ResetFeederError");
+        Request request = handler.generateRequest(Method.FEEDER_RESET_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ForceFeederError(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction ForceFeederError(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ForceFeederError");
+        Request request = handler.generateRequest(Method.FEEDER_FORCE_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction FeederReset(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction FeederReset(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(-1, "FeederReset");
+        Request request = handler.generateRequest(-1, Method.FEEDER_HW_RESET);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction RunFeederSelf(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction RunFeederSelf(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(-1, "RunFeederSelf");
+        Request request = handler.generateRequest(-1, Method.FEEDER_RUN_SELF_TEST);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederPartPitch(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederPartPitch(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederPartPitch");
+        Request request = handler.generateRequest(Method.FEEDER_GET_PART_PITCH);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederFeedSpeed(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederFeedSpeed(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederFeedSpeed");
+        Request request = handler.generateRequest(Method.FEEDER_GET_FEED_SPEED);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederDispBright(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederDispBright(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederDispBright");
+        Request request = handler.generateRequest(Method.FEEDER_GET_DISPLAY_BRIGHTNESS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederMotDir(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederMotDir(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederMotDir");
+        Request request = handler.generateRequest(Method.FEEDER_GET_MOTOR_DIRECTION);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederRemParts(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederRemParts(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederRemParts");
+        Request request = handler.generateRequest(Method.FEEDER_GET_REMAINING_PARTS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederTotParts(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederTotParts(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederTotParts");
+        Request request = handler.generateRequest(Method.FEEDER_GET_TOTAL_PARTS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederLowWarn(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederLowWarn(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederLowWarn");
+        Request request = handler.generateRequest(Method.FEEDER_GET_LOW_PARTS_WARNING_THRESHOLD);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederMotSlowDelay(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederMotSlowDelay(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederMotSlowDelay");
+        Request request = handler.generateRequest(Method.FEEDER_GET_MOTOR_SLOWDOWN_DELAY);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederShortID(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederShortID(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederShortID");
+        Request request = handler.generateRequest(Method.FEEDER_GET_SHORT_ID);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetFeederLongID(JRpcTransactionHandler handler, byte slot) {
+    public static Transaction GetFeederLongID(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetFeederLongID");
+        Request request = handler.generateRequest(Method.FEEDER_GET_LONG_ID);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         return handler.putRequest(request);
     }
 
     //--------------------------------
 
-    public static JRpcTransaction SetFeederPartPitch(JRpcTransactionHandler handler, byte slot, short partPitch) {
+    public static Transaction SetFeederPartPitch(TransactionHandler handler, byte slot, short partPitch, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if ((partPitch < 1) || (partPitch > 255)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederPartPitch");
+        Request request = handler.generateRequest(Method.FEEDER_SET_PART_PITCH);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("pitch", partPitch);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederFeedSpeed(JRpcTransactionHandler handler, byte slot, short feedSpeed) {
+    public static Transaction SetFeederFeedSpeed(TransactionHandler handler, byte slot, short feedSpeed, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if ((feedSpeed < 1) || (feedSpeed > 255)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederFeedSpeed");
+        Request request = handler.generateRequest(Method.FEEDER_SET_FEED_SPEED);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("speed", feedSpeed);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederDispBright(JRpcTransactionHandler handler, byte slot, short displayBrightness) {
+    public static Transaction SetFeederDispBright(TransactionHandler handler, byte slot, short displayBrightness, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if ((displayBrightness < 1) || (displayBrightness > 255)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederDispBright");
+        Request request = handler.generateRequest(Method.FEEDER_SET_DISPLAY_BRIGHTNESS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("bright", displayBrightness);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederMotDir(JRpcTransactionHandler handler, byte slot, short motorDirection) {
+    public static Transaction SetFeederMotDir(TransactionHandler handler, byte slot, short motorDirection, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if (motorDirection < 0) motorDirection = 0;
         if (motorDirection > 1) motorDirection = 1;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederMotDir");
+        Request request = handler.generateRequest(Method.FEEDER_SET_MOTOR_DIRECTION);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("dir", motorDirection);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederRemParts(JRpcTransactionHandler handler, byte slot, int remainingParts) {
+    public static Transaction SetFeederRemParts(TransactionHandler handler, byte slot, int remainingParts, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederRemParts");
+        Request request = handler.generateRequest(Method.FEEDER_SET_REMAINING_PARTS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("remaining", remainingParts);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederTotParts(JRpcTransactionHandler handler, byte slot, int totalParts) {
+    public static Transaction SetFeederTotParts(TransactionHandler handler, byte slot, int totalParts, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederTotParts");
+        Request request = handler.generateRequest(Method.FEEDER_SET_TOTAL_PARTS);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("total", totalParts);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederLowWarn(JRpcTransactionHandler handler, byte slot, int lowPartsWarning) {
+    public static Transaction SetFeederLowWarn(TransactionHandler handler, byte slot, int lowPartsWarning, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if ((lowPartsWarning < 0) || (lowPartsWarning > 65535)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederLowWarn");
+        Request request = handler.generateRequest(Method.FEEDER_SET_LOW_PARTS_WARNING_THRESHOLD);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("warn", lowPartsWarning);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederMotSlowDelay(JRpcTransactionHandler handler, byte slot, int motorSlowdownDelay) {
+    public static Transaction SetFeederMotSlowDelay(TransactionHandler handler, byte slot, int motorSlowdownDelay, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if ((motorSlowdownDelay < 0) || (motorSlowdownDelay > 65535)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederMotSlowDelay");
+        Request request = handler.generateRequest(Method.FEEDER_SET_MOTOR_SLOWDOWN_DELAY);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataNumber("delay", motorSlowdownDelay);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederShortID(JRpcTransactionHandler handler, byte slot, String shortPartID) {
+    public static Transaction SetFeederShortID(TransactionHandler handler, byte slot, String shortPartID, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if (shortPartID == null) return null;
         if ((shortPartID.length() < 1) || (shortPartID.length() > 5)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederShortID");
+        Request request = handler.generateRequest(Method.FEEDER_SET_SHORT_ID);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataString("shortID", shortPartID);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction SetFeederLongID(JRpcTransactionHandler handler, byte slot, String longPartID) {
+    public static Transaction SetFeederLongID(TransactionHandler handler, byte slot, String longPartID, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if (longPartID == null) longPartID = "";
         if ((longPartID.length() > 126)) return null;
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "SetFeederLongID");
+        Request request = handler.generateRequest(Method.FEEDER_SET_LONG_ID);
+        request.setNamedDataOutput(namedDataOutput);
         request.addDataNumber("feederSlot", slot);
         request.addDataString("longID", longPartID);
         return handler.putRequest(request);

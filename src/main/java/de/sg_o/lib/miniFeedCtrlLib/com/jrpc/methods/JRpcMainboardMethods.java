@@ -1,72 +1,86 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc.methods;
 
+import de.sg_o.lib.miniFeedCtrlLib.com.Method;
+import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;
+import de.sg_o.lib.miniFeedCtrlLib.com.TransactionHandler;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcRequest;
-import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcTransaction;
-import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcTransactionHandler;
 
 public class JRpcMainboardMethods {
-    public static JRpcTransaction GetMainboardFwVer(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetMainboardFwVer");
+    public static Transaction GetMainboardFwVer(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_FW_VERSION);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetMainboardHwVer(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetMainboardHwVer");
+    public static Transaction GetMainboardHwVer(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_HW_VERSION);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetMainboardID(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetMainboardID");
+    public static Transaction GetMainboardID(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_ID);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetMainboardProtoVer(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetMainboardProtoVer");
+    public static Transaction GetMainboardProtoVer(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_PROTOCOL_VERSION);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ListFeeders(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ListFeeders");
+    public static Transaction ListFeeders(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_LIST_FEEDERS);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction MainboardReset(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(-1, "MainboardReset");
+    public static Transaction MainboardReset(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(-1, Method.MAINBOARD_HW_RESET);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ResetMainboardError(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ResetMainboardError");
+    public static Transaction ResetMainboardError(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_RESET_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ForceMainboardError(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ForceMainboardError");
+    public static Transaction ForceMainboardError(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_FORCE_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetMainboardStatus(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetMainboardStatus");
+    public static Transaction GetMainboardStatus(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_STATUS);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction GetMainboardError(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "GetMainboardError");
+    public static Transaction GetMainboardError(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ListAllFeederStatus(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ListAllFeederStatus");
+    public static Transaction ListAllFeederStatus(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_LIST_ALL_FEEDER_STATUS);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction ListAllFeederError(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "ListAllFeederError");
+    public static Transaction ListAllFeederError(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_LIST_ALL_FEEDER_ERROR);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 
-    public static JRpcTransaction RunMainboardSelfTest(JRpcTransactionHandler handler) {
-        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), "RunMainboardSelfTest");
+    public static Transaction RunMainboardSelfTest(TransactionHandler handler, boolean namedDataOutput) {
+        JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_RUN_SELF_TEST);
+        request.setNamedDataOutput(namedDataOutput);
         return handler.putRequest(request);
     }
 }

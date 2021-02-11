@@ -1,35 +1,36 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
+import de.sg_o.lib.miniFeedCtrlLib.com.Method;
+import de.sg_o.lib.miniFeedCtrlLib.com.Request;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 import java.util.Objects;
 
-public class JRpcRequest {
-    private int id;
-    private String method;
+public class JRpcRequest extends Request {
     private JSONObject data = new JSONObject();
     private JSONArray orderedData = new JSONArray();
+    private boolean namedDataOutput = false;
 
-    public JRpcRequest(int id, String method) {
-        if (id < 1) id = -1;
-        if (method == null) throw new NullPointerException();
-        if (method.length() < 1) throw new InvalidParameterException();
-        this.id = id;
-        this.method = method;
+    public JRpcRequest(int id, Method method) {
+        super(id, method);
     }
 
-    public JRpcRequest(JSONObject msg) {
+    public JRpcRequest(byte[] msg) {
+        super(-1, Method.UNKNOWN);
         if (msg == null) throw new NullPointerException();
-        if (!msg.has("jsonrpc")) throw new JSONException("Not a JSON RPC message");
-        if (!msg.has("method")) throw new JSONException("Not a JSON RPC request");
-        this.method = msg.getString("method");
-        this.id = msg.optInt("id", -1);
-        if (msg.has("params")) {
-            JSONObject tmpO = msg.optJSONObject("params");
-            JSONArray tmpA = msg.optJSONArray("params");
+        String msgStrg = new String(msg, StandardCharsets.ISO_8859_1);
+        JSONObject msgObj = new JSONObject(msgStrg);
+        if (!msgObj.has("jsonrpc")) throw new JSONException("Not a JSON RPC message");
+        if (!msgObj.has("method")) throw new JSONException("Not a JSON RPC request");
+        super.setMethod(Method.fromMethod(msgObj.getString("method")));
+        super.setId(msgObj.optInt("id", -1));
+        if (msgObj.has("params")) {
+            JSONObject tmpO = msgObj.optJSONObject("params");
+            JSONArray tmpA = msgObj.optJSONArray("params");
             if (tmpO != null) {
                 this.data = tmpO;
             }
@@ -39,12 +40,8 @@ public class JRpcRequest {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public String getMethod() {
-        return method;
+    public void setNamedDataOutput(boolean namedDataOutput) {
+        this.namedDataOutput = namedDataOutput;
     }
 
     public JSONObject getData() {
@@ -65,21 +62,25 @@ public class JRpcRequest {
         this.orderedData.put(data);
     }
 
-    public JSONObject generateJSON(boolean named) {
+    public JSONObject generateJSON() {
         final JSONObject msg = new JSONObject();
         msg.put("jsonrpc", "2.0");
-        msg.put("method", this.method);
-        if (named) {
-            if (data.length() > 0) msg.put("params", data);
+        msg.put("method", super.getMethod().getMethod());
+        if (this.namedDataOutput) {
+            if (this.data.length() > 0) msg.put("params", this.data);
         } else {
-            if (orderedData.length() > 0) msg.put("params", orderedData);
+            if (this.orderedData.length() > 0) msg.put("params", this.orderedData);
         }
-        if (this.id > 0) msg.put("id", this.id);
+        if (super.getId() > 0) msg.put("id", super.getId());
         return msg;
     }
 
-    public String generateString(boolean named) {
-        return generateJSON(named).toString();
+    public byte[] generate() {
+        return generateString().getBytes(StandardCharsets.ISO_8859_1);
+    }
+
+    public String generateString() {
+        return generateJSON().toString();
     }
 
     @Override
@@ -98,8 +99,8 @@ public class JRpcRequest {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Request{");
-        sb.append("id=").append(id);
-        sb.append(", method='").append(method).append('\'');
+        sb.append("id=").append(super.getId());
+        sb.append(", method='").append(super.getMethod().getMethod()).append('\'');
         if (data.length() > orderedData.length()){
             sb.append(", data=").append(data);
         } else {
