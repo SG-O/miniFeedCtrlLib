@@ -11,8 +11,8 @@ class JRpcRequestTest {
     @Test
     void generateTest() {
         JRpcRequest r0 = new JRpcRequest(-5, Method.FEEDER_SET_TOTAL_PARTS);
-        r0.addDataNumber("data1", 10);
-        r0.addDataString("data2", "abc");
+        r0.dataPutInt("data1", 10);
+        r0.dataPutString("data2", "abc");
         r0.setNamedDataOutput(true);
         JRpcRequest r1 = new JRpcRequest(r0.generate());
         assertEquals(r0, r1);

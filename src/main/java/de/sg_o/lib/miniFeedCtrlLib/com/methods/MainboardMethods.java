@@ -1,11 +1,11 @@
-package de.sg_o.lib.miniFeedCtrlLib.com.jrpc.methods;
+package de.sg_o.lib.miniFeedCtrlLib.com.methods;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Method;
 import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;
 import de.sg_o.lib.miniFeedCtrlLib.com.TransactionHandler;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcRequest;
 
-public class JRpcMainboardMethods {
+public class MainboardMethods {
     public static Transaction GetMainboardFwVer(TransactionHandler handler, boolean namedDataOutput) {
         JRpcRequest request = new JRpcRequest(handler.getAndIncCounter(), Method.MAINBOARD_GET_FW_VERSION);
         request.setNamedDataOutput(namedDataOutput);

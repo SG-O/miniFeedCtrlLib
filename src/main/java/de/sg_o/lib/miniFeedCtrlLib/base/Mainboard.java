@@ -21,6 +21,8 @@ public class Mainboard {
         if (id == null) throw new InvalidDataException("ID(null)", 3, -1);;
         if (id.length < 3) throw new InvalidDataException("ID", 3, -1);
         System.arraycopy(id, 0, this.id, 0, this.id.length);
+        this.status = Status.UNKNOWN;
+        this.error = SystemError.UNKNOWN;
     }
 
     public void setFirmwareVersion(long firmwareVersion) {

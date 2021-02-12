@@ -13,12 +13,12 @@ class JRpcBatchRequestTest {
     @Test
     void generateTest() {
         JRpcRequest r0 = new JRpcRequest(3, Method.MAINBOARD_RUN_SELF_TEST);
-        r0.addDataNumber("data1", 10);
-        r0.addDataString("data2", "abc");
+        r0.dataPutInt("data1", 10);
+        r0.dataPutString("data2", "abc");
 
         JRpcRequest r1 = new JRpcRequest(4, Method.FEEDER_SET_LONG_ID);
-        r1.addDataString("data3", "foo");
-        r1.addDataNumber("data4", -13);
+        r1.dataPutString("data3", "foo");
+        r1.dataPutInt("data4", -13);
 
         JRpcBatchRequest br0 = new JRpcBatchRequest();
         br0.addRequests(r0);

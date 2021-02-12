@@ -6,8 +6,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class JRpcRequest extends Request {
@@ -52,12 +57,50 @@ public class JRpcRequest extends Request {
         return orderedData;
     }
 
-    public void addDataNumber(String key, long data) {
+    @Override
+    public void dataPutUnsignedByte(String key, short data) {
         this.data.put(key, data);
         this.orderedData.put(data);
     }
 
-    public void addDataString(String key, String data) {
+    @Override
+    public void dataPutUnsignedShort(String key, int data) {
+        this.data.put(key, data);
+        this.orderedData.put(data);
+    }
+
+    @Override
+    public void dataPutUnsignedInt(String key, long data) {
+        this.data.put(key, data);
+        this.orderedData.put(data);
+    }
+
+    @Override
+    public void dataPutByte(String key, byte data) {
+        this.data.put(key, data);
+        this.orderedData.put(data);
+    }
+
+    @Override
+    public void dataPutShort(String key, short data) {
+        this.data.put(key, data);
+        this.orderedData.put(data);
+    }
+
+    @Override
+    public void dataPutInt(String key, int data) {
+        this.data.put(key, data);
+        this.orderedData.put(data);
+    }
+
+    @Override
+    public void dataPutLong(String key, long data) {
+        this.data.put(key, data);
+        this.orderedData.put(data);
+    }
+
+    @Override
+    public void dataPutString(String key, String data) {
         this.data.put(key, data);
         this.orderedData.put(data);
     }
@@ -76,7 +119,14 @@ public class JRpcRequest extends Request {
     }
 
     public byte[] generate() {
-        return generateString().getBytes(StandardCharsets.ISO_8859_1);
+        String str = generateString();
+        CharsetEncoder enc = StandardCharsets.ISO_8859_1.newEncoder();
+        int len = str.length();
+        byte[] buf = new byte[len + 1];
+        ByteBuffer byteBuf = ByteBuffer.wrap(buf);
+        enc.encode(CharBuffer.wrap(str), byteBuf, true);
+        buf[len] = 0;
+        return buf;
     }
 
     public String generateString() {

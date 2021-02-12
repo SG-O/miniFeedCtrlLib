@@ -16,9 +16,14 @@ public abstract class Request {
         this.id = id;
     }
 
-    public abstract void addDataNumber(String key, long data);
-
-    public abstract void addDataString(String key, String data);
+    public abstract void dataPutUnsignedByte(String key, short data);
+    public abstract void dataPutUnsignedShort(String key, int data);
+    public abstract void dataPutUnsignedInt(String key, long data);
+    public abstract void dataPutByte(String key, byte data);
+    public abstract void dataPutShort(String key, short data);
+    public abstract void dataPutInt(String key, int data);
+    public abstract void dataPutLong(String key, long data);
+    public abstract void dataPutString(String key, String data);
 
     public abstract void setNamedDataOutput(boolean namedDataOutput);
 

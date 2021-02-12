@@ -1,6 +1,7 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Response;
+import de.sg_o.lib.miniFeedCtrlLib.com.ResultType;
 import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,7 +9,11 @@ import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class JRpcResponse extends Response {
@@ -24,7 +29,7 @@ public class JRpcResponse extends Response {
         if (!msg.has("jsonrpc")) throw new JSONException("Not a JSON RPC message");
         super.setId(msg.optInt("id", -1));
         if (msg.has("error")) {
-            super.setError(SystemError.UNKNOWN);
+            super.setError(SystemError.fromCode((short)msg.getJSONObject("error").optInt("code", 254)));
         } else {
             parseResult(msg);
         }
@@ -102,6 +107,36 @@ public class JRpcResponse extends Response {
         return longs;
     }
 
+    public void resultPutUnsignedByte(short data) {
+        result.put(data & 0xFF);
+    }
+    public void resultPutUnsignedShort(int data) {
+        result.put(data & 0xFFFF);
+    }
+    public void resultPutUnsignedInt(long data) {
+        result.put(data & 0xFFFFFFFFL);
+    }
+
+    public void resultPutByte(byte data) {
+        result.put(data);
+    }
+
+    public void resultPutShort(short data) {
+        result.put(data);
+    }
+
+    public void resultPutInt(int data) {
+        result.put(data);
+    }
+
+    public void resultPutLong(long data) {
+        result.put(data);
+    }
+
+    public void resultPutString(String data) {
+        result.put(data);
+    }
+
     public short[] getResultAsShortArray() {
         if (super.getResultType() != ResultType.ARRAY) return null;
         short[] longs = new short[result.length()];
@@ -130,7 +165,10 @@ public class JRpcResponse extends Response {
         final JSONObject msg = new JSONObject();
         msg.put("jsonrpc", "2.0");
         if (isError()) {
-            msg.put("error", super.getError().getCode());
+            JSONObject error = new JSONObject();
+            error.put("code", super.getError().getCode());
+            error.put("message", super.getError().toString());
+            msg.put("error", error);
         } else {
             msg.put("result", this.result);
         }
@@ -144,7 +182,14 @@ public class JRpcResponse extends Response {
     }
 
     public byte[] generate() {
-        return generateString().getBytes(StandardCharsets.ISO_8859_1);
+        String str = generateString();
+        CharsetEncoder enc = StandardCharsets.ISO_8859_1.newEncoder();
+        int len = str.length();
+        byte[] buf = new byte[len + 1];
+        ByteBuffer byteBuf = ByteBuffer.wrap(buf);
+        enc.encode(CharBuffer.wrap(str), byteBuf, true);
+        buf[len] = 0;
+        return buf;
     }
 
     @Override

@@ -3,21 +3,9 @@ package de.sg_o.lib.miniFeedCtrlLib.com;
 import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 
 public abstract class Response {
-    public enum ResultType {
-        ERROR,
-        LONG,
-        DOUBLE,
-        BOOLEAN,
-        NULL,
-        STRING,
-        ARRAY,
-        OBJECT,
-        BIGINT,
-        BIGDECIMAL
-    }
     private int id;
     private ResultType resultType = ResultType.ERROR;
-    private SystemError error;
+    private SystemError error = SystemError.NO_ERROR;
 
     public Response(int id) {
         if (id < 1) id = -1;
@@ -33,6 +21,7 @@ public abstract class Response {
     }
 
     public SystemError getError() {
+        if (error == null) return SystemError.UNKNOWN;
         return error;
     }
 
@@ -42,8 +31,8 @@ public abstract class Response {
     }
 
     public boolean isError() {
-        if (error == null) return true;
-        return error == SystemError.NO_ERROR;
+        if (this.error == null) return true;
+        return this.error != SystemError.NO_ERROR;
     }
 
     public ResultType getResultType() {
@@ -61,5 +50,15 @@ public abstract class Response {
     public abstract byte[] getResultAsByteArray();
     public abstract short[] getResultAsShortArray();
     public abstract int[] getResultAsIntArray();
+
+    public abstract void resultPutUnsignedByte(short data);
+    public abstract void resultPutUnsignedShort(int data);
+    public abstract void resultPutUnsignedInt(long data);
+    public abstract void resultPutByte(byte data);
+    public abstract void resultPutShort(short data);
+    public abstract void resultPutInt(int data);
+    public abstract void resultPutLong(long data);
+    public abstract void resultPutString(String data);
+
     public abstract byte[] generate();
 }

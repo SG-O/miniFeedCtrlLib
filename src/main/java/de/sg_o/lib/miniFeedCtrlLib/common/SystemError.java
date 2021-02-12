@@ -16,6 +16,7 @@ public enum SystemError {
     USER_CAUSED((short)12),
     CRC_ERROR((short)13),
     BUSY_EXECUTION_ERROR((short)14),
+    NO_FEEDER((short)15),
     UNKNOWN((short)254);
 
     private short code;
@@ -56,6 +57,8 @@ public enum SystemError {
                 return CRC_ERROR;
             case 14:
                 return BUSY_EXECUTION_ERROR;
+            case 15:
+                return NO_FEEDER;
         }
         return UNKNOWN;
     }

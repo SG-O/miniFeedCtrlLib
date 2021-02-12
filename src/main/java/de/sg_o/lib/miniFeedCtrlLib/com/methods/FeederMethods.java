@@ -1,16 +1,16 @@
-package de.sg_o.lib.miniFeedCtrlLib.com.jrpc.methods;
+package de.sg_o.lib.miniFeedCtrlLib.com.methods;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Method;
 import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;
 import de.sg_o.lib.miniFeedCtrlLib.com.TransactionHandler;
 import de.sg_o.lib.miniFeedCtrlLib.com.Request;
 
-public class JRpcFeederMethods {
+public class FeederMethods {
     public static Transaction GetFeederFwVer(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_FW_VERSION);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -18,7 +18,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_HW_VERSION);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -26,7 +26,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_ID);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -34,7 +34,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_PROTOCOL_VERSION);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -42,7 +42,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_STATUS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -50,7 +50,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_ERROR);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -58,7 +58,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_TOTAL_FEEDS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -66,7 +66,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_FEED);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -74,7 +74,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_RESET_ERROR);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -82,7 +82,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_FORCE_ERROR);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -90,7 +90,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(-1, Method.FEEDER_HW_RESET);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -98,7 +98,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(-1, Method.FEEDER_RUN_SELF_TEST);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -106,7 +106,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_PART_PITCH);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -114,7 +114,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_FEED_SPEED);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -122,7 +122,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_DISPLAY_BRIGHTNESS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -130,7 +130,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_MOTOR_DIRECTION);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -138,7 +138,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_REMAINING_PARTS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -146,7 +146,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_TOTAL_PARTS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -154,7 +154,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_LOW_PARTS_WARNING_THRESHOLD);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -162,7 +162,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_MOTOR_SLOWDOWN_DELAY);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -170,7 +170,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_SHORT_ID);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -178,7 +178,7 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_LONG_ID);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
+        request.dataPutByte("feederSlot", slot);
         return handler.putRequest(request);
     }
 
@@ -189,8 +189,8 @@ public class JRpcFeederMethods {
         if ((partPitch < 1) || (partPitch > 255)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_PART_PITCH);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("pitch", partPitch);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutUnsignedByte("pitch", partPitch);
         return handler.putRequest(request);
     }
 
@@ -199,8 +199,8 @@ public class JRpcFeederMethods {
         if ((feedSpeed < 1) || (feedSpeed > 255)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_FEED_SPEED);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("speed", feedSpeed);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutUnsignedByte("speed", feedSpeed);
         return handler.putRequest(request);
     }
 
@@ -209,8 +209,8 @@ public class JRpcFeederMethods {
         if ((displayBrightness < 1) || (displayBrightness > 255)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_DISPLAY_BRIGHTNESS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("bright", displayBrightness);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutUnsignedByte("bright", displayBrightness);
         return handler.putRequest(request);
     }
 
@@ -220,8 +220,8 @@ public class JRpcFeederMethods {
         if (motorDirection > 1) motorDirection = 1;
         Request request = handler.generateRequest(Method.FEEDER_SET_MOTOR_DIRECTION);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("dir", motorDirection);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutUnsignedByte("dir", motorDirection);
         return handler.putRequest(request);
     }
 
@@ -229,8 +229,8 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_REMAINING_PARTS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("remaining", remainingParts);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutInt("remaining", remainingParts);
         return handler.putRequest(request);
     }
 
@@ -238,8 +238,8 @@ public class JRpcFeederMethods {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_TOTAL_PARTS);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("total", totalParts);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutInt("total", totalParts);
         return handler.putRequest(request);
     }
 
@@ -248,8 +248,8 @@ public class JRpcFeederMethods {
         if ((lowPartsWarning < 0) || (lowPartsWarning > 65535)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_LOW_PARTS_WARNING_THRESHOLD);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("warn", lowPartsWarning);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutUnsignedShort("warn", lowPartsWarning);
         return handler.putRequest(request);
     }
 
@@ -258,8 +258,8 @@ public class JRpcFeederMethods {
         if ((motorSlowdownDelay < 0) || (motorSlowdownDelay > 65535)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_MOTOR_SLOWDOWN_DELAY);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataNumber("delay", motorSlowdownDelay);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutUnsignedShort("delay", motorSlowdownDelay);
         return handler.putRequest(request);
     }
 
@@ -269,8 +269,8 @@ public class JRpcFeederMethods {
         if ((shortPartID.length() < 1) || (shortPartID.length() > 5)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_SHORT_ID);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataString("shortID", shortPartID);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutString("shortID", shortPartID);
         return handler.putRequest(request);
     }
 
@@ -280,8 +280,8 @@ public class JRpcFeederMethods {
         if ((longPartID.length() > 126)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_LONG_ID);
         request.setNamedDataOutput(namedDataOutput);
-        request.addDataNumber("feederSlot", slot);
-        request.addDataString("longID", longPartID);
+        request.dataPutByte("feederSlot", slot);
+        request.dataPutString("longID", longPartID);
         return handler.putRequest(request);
     }
 }
