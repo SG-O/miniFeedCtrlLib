@@ -1,20 +1,19 @@
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Response;
-import de.sg_o.lib.miniFeedCtrlLib.com.ResultType;
+import de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType;
 import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Objects;
+
+import static de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType.parseType;
 
 public class JRpcResponse extends Response {
     private JSONArray result = new JSONArray();
@@ -56,7 +55,7 @@ public class JRpcResponse extends Response {
 
     private void parseResultType() {
         if (result.length() > 1) {
-            super.setResultType(ResultType.ARRAY);
+            super.setResultType(MessageDataType.ARRAY);
             return;
         }
         super.setResultType(parseType(result.opt(0)));
@@ -68,41 +67,43 @@ public class JRpcResponse extends Response {
         return result;
     }
 
-    public ResultType getResultType() {
-        if (super.isError()) return ResultType.ERROR;
+    public MessageDataType getResultType() {
+        if (super.isError()) return MessageDataType.ERROR;
         return super.getResultType();
     }
 
     public long getResultAsLong() {
-        if (super.getResultType() != ResultType.LONG) return 0;
-        return result.optLong(0, 0);
+        if (super.getResultType() != MessageDataType.LONG) return 0;
+        return result.optLong(0, -1);
     }
 
     public String getResultAsString() {
-        if (super.getResultType() != ResultType.STRING) return null;
+        if (super.getResultType() != MessageDataType.STRING) return null;
         return result.optString(0);
     }
 
     public long[] getResultAsLongArray() {
-        if (super.getResultType() != ResultType.ARRAY) return null;
+        if (super.getResultType() != MessageDataType.ARRAY) return null;
         long[] longs = new long[result.length()];
         for(int i = 0; i < result.length(); i++) {
-            if (parseType(result.opt(i)) != ResultType.LONG) {
-                longs[i] = 0;
+            if (parseType(result.opt(i)) != MessageDataType.LONG) {
+                longs[i] = -1;
+                continue;
             }
-            longs[i] = result.optLong(i, 0);
+            longs[i] = result.optLong(i, -1);
         }
         return longs;
     }
 
     public byte[] getResultAsByteArray() {
-        if (super.getResultType() != ResultType.ARRAY) return null;
+        if (super.getResultType() != MessageDataType.ARRAY) return null;
         byte[] longs = new byte[result.length()];
         for(int i = 0; i < result.length(); i++) {
-            if (parseType(result.opt(i)) != ResultType.LONG) {
-                longs[i] = 0;
+            if (parseType(result.opt(i)) != MessageDataType.LONG) {
+                longs[i] = -1;
+                continue;
             }
-            longs[i] = (byte)(result.optLong(i, 0) & 0xFFL);
+            longs[i] = (byte)(result.optLong(i, -1) & 0xFFL);
         }
         return longs;
     }
@@ -138,25 +139,27 @@ public class JRpcResponse extends Response {
     }
 
     public short[] getResultAsShortArray() {
-        if (super.getResultType() != ResultType.ARRAY) return null;
+        if (super.getResultType() != MessageDataType.ARRAY) return null;
         short[] longs = new short[result.length()];
         for(int i = 0; i < result.length(); i++) {
-            if (parseType(result.opt(i)) != ResultType.LONG) {
-                longs[i] = 0;
+            if (parseType(result.opt(i)) != MessageDataType.LONG) {
+                longs[i] = -1;
+                continue;
             }
-            longs[i] = (short)(result.optLong(i, 0) & 0xFFFFL);
+            longs[i] = (short)(result.optLong(i, -1) & 0xFFFFL);
         }
         return longs;
     }
 
     public int[] getResultAsIntArray() {
-        if (super.getResultType() != ResultType.ARRAY) return null;
+        if (super.getResultType() != MessageDataType.ARRAY) return null;
         int[] longs = new int[result.length()];
         for(int i = 0; i < result.length(); i++) {
-            if (parseType(result.opt(i)) != ResultType.LONG) {
-                longs[i] = 0;
+            if (parseType(result.opt(i)) != MessageDataType.LONG) {
+                longs[i] = -1;
+                continue;
             }
-            longs[i] = (int)(result.optLong(i, 0) & 0xFFFFFFFFL);
+            longs[i] = (int)(result.optLong(i, -1) & 0xFFFFFFFFL);
         }
         return longs;
     }
@@ -213,26 +216,5 @@ public class JRpcResponse extends Response {
         sb.append(", result=").append(result);
         sb.append('}');
         return sb.toString();
-    }
-
-    public static ResultType parseType(Object data) {
-        if (data == null) return ResultType.NULL;
-        if (data instanceof Boolean) return ResultType.BOOLEAN;
-        if (data instanceof BigDecimal) {
-            if (((BigDecimal)data).precision() > 15) {
-                return ResultType.BIGDECIMAL;
-            } else {
-                return ResultType.DOUBLE;
-            }
-        }
-        if ((data instanceof Float) || (data instanceof Double)) {
-            return ResultType.DOUBLE;
-        }
-        if (data instanceof BigInteger) return ResultType.BIGINT;
-        if (data instanceof Number) return ResultType.LONG;
-        if (data instanceof String) return ResultType.STRING;
-        if (data instanceof JSONArray) return ResultType.ARRAY;
-        if (data instanceof JSONObject) return ResultType.OBJECT;
-        return ResultType.NULL;
     }
 }

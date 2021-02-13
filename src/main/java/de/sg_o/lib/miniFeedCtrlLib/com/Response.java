@@ -4,7 +4,7 @@ import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 
 public abstract class Response {
     private int id;
-    private ResultType resultType = ResultType.ERROR;
+    private MessageDataType resultType = MessageDataType.ERROR;
     private SystemError error = SystemError.NO_ERROR;
 
     public Response(int id) {
@@ -35,12 +35,12 @@ public abstract class Response {
         return this.error != SystemError.NO_ERROR;
     }
 
-    public ResultType getResultType() {
+    public MessageDataType getResultType() {
         return resultType;
     }
 
-    public void setResultType(ResultType resultType) {
-        if (resultType == null) resultType = ResultType.ERROR;
+    public void setResultType(MessageDataType resultType) {
+        if (resultType == null) resultType = MessageDataType.ERROR;
         this.resultType = resultType;
     }
 

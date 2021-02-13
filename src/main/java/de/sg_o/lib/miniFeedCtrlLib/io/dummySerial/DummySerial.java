@@ -11,6 +11,7 @@ import de.sg_o.lib.miniFeedCtrlLib.io.IO;
 import java.util.LinkedList;
 
 public class DummySerial extends IO {
+    public static final String PREFIX = "dummy";
 
     private final String portName;
     private boolean connected = false;
@@ -18,22 +19,34 @@ public class DummySerial extends IO {
 
     private final LinkedList<Response> responses = new LinkedList<>();
 
-    public DummySerial(TransactionHandler handler, String portName) throws InvalidDataException {
+    public DummySerial(TransactionHandler handler, String portName, int lowerID) throws InvalidDataException {
         super(handler);
         if (handler == null) throw new NullPointerException();
         this.portName = portName;
-        this.hw = new DummyHardware();
+        this.hw = new DummyHardware(lowerID);
     }
 
     public String[] listPorts() {
-        return new String[]{portName};
+        return new String[]{PREFIX + SEPERATOR + portName};
+    }
+
+    @Override
+    public void setSpeed(int speed) {
     }
 
     public synchronized boolean connect(String port) {
-        if (this.portName != port) return false;
+        String[] split = port.split(SEPERATOR);
+        if (split.length != 2) return false;
+        if (!split[0].equalsIgnoreCase(PREFIX)) return false;
+        if (!this.portName.equals(split[1])) return false;
         if (isConnected()) return false;
         this.connected = true;
         return true;
+    }
+
+    public String getConnectionName() {
+        if (!connected) return null;
+        return PREFIX + this.portName;
     }
 
     public synchronized boolean isConnected() {
@@ -66,14 +79,15 @@ public class DummySerial extends IO {
         return true;
     }
 
-    public synchronized void parseReceive() {
-        if (!isConnected()) return;
-        while (this.responses.size() > 0) {
+    public synchronized Transaction parseReceive() {
+        if (!isConnected()) return null;
+        if (this.responses.size() > 0) {
             Response resp = this.responses.remove();
             if (resp instanceof JRpcResponse) {
                 super.putOnConsole(((JRpcResponse)resp).generateString(), false);
             }
-            super.getHandler().parseResponse(resp.generate());
+            return super.getHandler().parseResponse(resp.generate());
         }
+        return null;
     }
 }

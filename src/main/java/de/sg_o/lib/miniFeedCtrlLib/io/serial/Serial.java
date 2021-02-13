@@ -9,6 +9,8 @@ import de.sg_o.lib.miniFeedCtrlLib.io.IO;
 import java.nio.charset.StandardCharsets;
 
 public class Serial extends IO {
+    public static final String PREFIX = "serial";
+
     SerialPort serialPort;
     byte[] buffer = new byte[0];
 
@@ -29,20 +31,35 @@ public class Serial extends IO {
         SerialPort[] ports = SerialPort.getCommPorts();
         String[] portNames = new String[ports.length];
         for (int i = 0; i < ports.length; i++) {
-            portNames[i] = ports[i].getSystemPortName();
+            portNames[i] = PREFIX + SEPERATOR + ports[i].getSystemPortName();
         }
         return portNames;
     }
 
     @Override
+    public void setSpeed(int speed) {
+        this.baudRate = speed;
+    }
+
+    @Override
     public synchronized boolean connect(String port) {
         if (isConnected()) return false;
-        serialPort = SerialPort.getCommPort(port);
+        String[] split = port.split(SEPERATOR);
+        if (split.length != 2) return false;
+        if (!split[0].equalsIgnoreCase(PREFIX)) return false;
+        serialPort = SerialPort.getCommPort(split[1]);
         serialPort.openPort(0);
         serialPort.setComPortParameters(baudRate, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
         serialPort.setFlowControl(SerialPort.FLOW_CONTROL_DISABLED);
         serialPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING | SerialPort.TIMEOUT_WRITE_BLOCKING, 500, 0);
-        return false;
+        buffer = new byte[0];
+        return true;
+    }
+
+    @Override
+    public String getConnectionName() {
+        if (!isConnected()) return null;
+        return PREFIX + this.serialPort.getSystemPortName();
     }
 
     @Override
@@ -79,7 +96,8 @@ public class Serial extends IO {
     }
 
     @Override
-    public synchronized void parseReceive() {
+    public synchronized Transaction parseReceive() {
+        if (!isConnected()) return null;
         if (serialPort.bytesAvailable() > 0) {
             int toRead = serialPort.bytesAvailable();
             int offset = buffer.length;
@@ -88,7 +106,7 @@ public class Serial extends IO {
             serialPort.readBytes(buf, toRead, offset);
             this.buffer = buf;
         }
-        if (buffer.length < 2) return;
+        if (buffer.length < 2) return null;
         System.out.println(new String(buffer, StandardCharsets.ISO_8859_1));
         for (int i = 0; i < buffer.length; i++) {
             if (buffer[i] != '{') {
@@ -111,12 +129,12 @@ public class Serial extends IO {
                         i = -1;
                         String msgStrg = new String(msg, StandardCharsets.ISO_8859_1);
                         super.putOnConsole(msgStrg, false);
-                        super.getHandler().parseResponse(msg);
-                        break;
+                        return super.getHandler().parseResponse(msg);
                     }
                     i++;
                 }
             }
         }
+        return null;
     }
 }

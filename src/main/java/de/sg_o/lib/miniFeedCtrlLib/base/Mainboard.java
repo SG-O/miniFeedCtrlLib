@@ -2,6 +2,7 @@ package de.sg_o.lib.miniFeedCtrlLib.base;
 
 import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import de.sg_o.lib.miniFeedCtrlLib.common.InvalidDataException;
+import de.sg_o.lib.miniFeedCtrlLib.util.ByteArray;
 
 import java.util.Arrays;
 
@@ -93,9 +94,9 @@ public class Mainboard {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Mainboard{");
         sb.append("id=").append(getIdString());
-        sb.append(", firmwareVersion=").append(getFirmwareVersion());
-        sb.append(", hardwareVersion=").append(getHardwareVersion());
-        sb.append(", protocolVersion=").append(getProtocolVersion());
+        sb.append(", firmwareVersion=0x").append(ByteArray.intsToHex(new int[] {(int)(getFirmwareVersion() >> 32),(int)getFirmwareVersion()}));
+        sb.append(", hardwareVersion=0x").append(ByteArray.intsToHex(new int[] {(int)(getHardwareVersion() >> 32),(int)getHardwareVersion()}));
+        sb.append(", protocolVersion=0x").append(ByteArray.bytesToHex(new byte[] {(byte) getProtocolVersion()}));
         sb.append(", status=").append(getStatus());
         sb.append(", error=").append(getError());
         sb.append('}');

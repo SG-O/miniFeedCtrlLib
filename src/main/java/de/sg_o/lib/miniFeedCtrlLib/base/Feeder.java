@@ -2,6 +2,7 @@ package de.sg_o.lib.miniFeedCtrlLib.base;
 
 import de.sg_o.lib.miniFeedCtrlLib.common.SystemError;
 import de.sg_o.lib.miniFeedCtrlLib.common.InvalidDataException;
+import de.sg_o.lib.miniFeedCtrlLib.util.ByteArray;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -39,6 +40,8 @@ public class Feeder {
         System.arraycopy(id, 0, this.id, 0, this.id.length);
         if ((slot > 63) || (slot < 0)) slot = -1;
         this.slot = slot;
+        this.status = Status.UNKNOWN;
+        this.error = SystemError.UNKNOWN;
     }
 
     public void setFirmwareVersion(long firmwareVersion) {
@@ -232,9 +235,9 @@ public class Feeder {
         final StringBuilder sb = new StringBuilder("Feeder{");
         sb.append("id=").append(getIdString());
         sb.append(", slot=").append(getSlot());
-        sb.append(", firmwareVersion=").append(getFirmwareVersion());
-        sb.append(", hardwareVersion=").append(getHardwareVersion());
-        sb.append(", protocolVersion=").append(getProtocolVersion());
+        sb.append(", firmwareVersion=").append(ByteArray.intsToHex(new int[] {(int)(getFirmwareVersion() >> 32),(int)getFirmwareVersion()}));
+        sb.append(", hardwareVersion=").append(ByteArray.intsToHex(new int[] {(int)(getHardwareVersion() >> 32),(int)getHardwareVersion()}));
+        sb.append(", protocolVersion=").append(ByteArray.bytesToHex(new byte[] {(byte) getProtocolVersion()}));
         sb.append(", status=").append(getStatus());
         sb.append(", error=").append(getError());
         sb.append(", remainingParts=").append(getRemainingParts());

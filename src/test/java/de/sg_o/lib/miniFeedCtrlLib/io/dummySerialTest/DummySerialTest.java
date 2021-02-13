@@ -3,8 +3,8 @@ package de.sg_o.lib.miniFeedCtrlLib.io.dummySerialTest;
 import de.sg_o.lib.miniFeedCtrlLib.base.Feeder;
 import de.sg_o.lib.miniFeedCtrlLib.com.*;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcTransactionHandler;
-import de.sg_o.lib.miniFeedCtrlLib.com.methods.FeederMethods;
-import de.sg_o.lib.miniFeedCtrlLib.com.methods.MainboardMethods;
+import de.sg_o.lib.miniFeedCtrlLib.common.FeederMethods;
+import de.sg_o.lib.miniFeedCtrlLib.common.MainboardMethods;
 import de.sg_o.lib.miniFeedCtrlLib.common.InvalidDataException;
 import de.sg_o.lib.miniFeedCtrlLib.io.dummySerial.DummySerial;
 import org.junit.jupiter.api.Test;
@@ -16,20 +16,20 @@ class DummySerialTest {
     @Test
     void sendNextTest() throws InvalidDataException {
         TransactionHandler h0 = new JRpcTransactionHandler();
-        DummySerial d0 = new DummySerial(h0, "dummy0");
+        DummySerial d0 = new DummySerial(h0, "dummy0", 0xFFFFFFFF);
         assertFalse(d0.isConnected());
         d0.connect("");
         assertFalse(d0.isConnected());
-        d0.connect("dummy0");
+        d0.connect(DummySerial.PREFIX + DummySerial.SEPERATOR + "dummy0");
         assertTrue(d0.isConnected());
-        assertEquals("dummy0", d0.listPorts()[0]);
+        assertEquals("dummy://dummy0", d0.listPorts()[0]);
 
         Transaction t0 = MainboardMethods.GetMainboardID(h0, true);
         d0.sendNext();
         d0.parseReceive();
         assertNotNull(t0);
         assertTrue(t0.isDone());
-        assertEquals(ResultType.ARRAY, t0.getResponse().getResultType());
+        assertEquals(MessageDataType.ARRAY, t0.getResponse().getResultType());
 
         Transaction t1 = FeederMethods.GetFeederID(h0, (byte)1, true);
         d0.sendNext();

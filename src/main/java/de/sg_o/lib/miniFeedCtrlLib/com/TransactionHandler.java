@@ -31,7 +31,7 @@ public abstract class TransactionHandler {
         return trans;
     }
 
-    public abstract void parseResponse(byte[] msg);
+    public abstract Transaction parseResponse(byte[] msg);
 
     public Transaction removeTransaction(int id) {
         synchronized(this) {

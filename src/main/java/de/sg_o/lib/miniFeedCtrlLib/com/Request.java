@@ -11,7 +11,7 @@ public abstract class Request {
         this.method = method;
     }
 
-    public void setId(int id) {
+    protected void setId(int id) {
         if (id < 1) id = -1;
         this.id = id;
     }
@@ -27,7 +27,12 @@ public abstract class Request {
 
     public abstract void setNamedDataOutput(boolean namedDataOutput);
 
-    public void setMethod(Method method) {
+    public abstract MessageDataType getDataType(String key, int index);
+
+    public abstract long getDataAsLong(String key, int index);
+    public abstract String getDataAsString(String key, int index);
+
+    protected void setMethod(Method method) {
         if (method == null) this.method = Method.UNKNOWN;
         this.method = method;
     }

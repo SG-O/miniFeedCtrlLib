@@ -1,4 +1,4 @@
-package de.sg_o.lib.miniFeedCtrlLib.com.methods;
+package de.sg_o.lib.miniFeedCtrlLib.common;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Method;
 import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;

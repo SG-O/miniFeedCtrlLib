@@ -5,7 +5,6 @@ import de.sg_o.lib.miniFeedCtrlLib.base.Mainboard;
 import de.sg_o.lib.miniFeedCtrlLib.base.Status;
 import de.sg_o.lib.miniFeedCtrlLib.com.Request;
 import de.sg_o.lib.miniFeedCtrlLib.com.Response;
-import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcRequest;
 import de.sg_o.lib.miniFeedCtrlLib.com.jrpc.JRpcResponse;
 import de.sg_o.lib.miniFeedCtrlLib.common.InvalidDataException;
@@ -21,11 +20,11 @@ public class DummyHardware {
     private static final long FEEDER_HW_VERSION = 0xDEADBEEF00000000L;
     private static final long FEEDER_FW_VERSION = 0xDEADBEEF00000000L;
     
-    private Mainboard mainboard;
-    private Feeder[] feeders = new Feeder[64];
+    private final Mainboard mainboard;
+    private final Feeder[] feeders = new Feeder[64];
 
-    public DummyHardware() throws InvalidDataException {
-        int[] id = {0xDEADBEEF, 0xFFFFFFFF, 0xFFFFFFFF};
+    public DummyHardware(int lowerID) throws InvalidDataException {
+        int[] id = {0xDEADBEEF, 0xFFFFFFFF, lowerID};
         this.mainboard = new Mainboard(id);
         this.mainboard.setError(SystemError.NO_ERROR);
         this.mainboard.setStatus(Status.READY);
@@ -58,109 +57,105 @@ public class DummyHardware {
         JRpcRequest req = new JRpcRequest(msg);
         Response resp;
         resp = new JRpcResponse(req.getId());
-        if (mainboard.getError() != SystemError.NO_ERROR) {
-            resp.setError(mainboard.getError());
-        } else {
-            switch (req.getMethod()) {
-                case MAINBOARD_GET_PROTOCOL_VERSION:
-                    resp.resultPutUnsignedByte(MAINBOARD_PROTO_VERSION);
-                    break;
-                case MAINBOARD_GET_STATUS:
+        switch (req.getMethod()) {
+            case MAINBOARD_GET_PROTOCOL_VERSION:
+                resp.resultPutUnsignedByte(MAINBOARD_PROTO_VERSION);
+                break;
+            case MAINBOARD_GET_STATUS:
+                if (mainboard.getError() != SystemError.NO_ERROR) {
+                    resp.resultPutUnsignedByte(Status.ERROR.getCode());
+                } else {
                     resp.resultPutUnsignedByte(mainboard.getStatus().getCode());
-                    break;
-                case MAINBOARD_GET_ERROR:
-                    resp.resultPutUnsignedByte(mainboard.getError().getCode());
-                    break;
-                case MAINBOARD_GET_ID:
-                    int[] id = mainboard.getId();
-                    resp.resultPutUnsignedInt(id[0]);
-                    resp.resultPutUnsignedInt(id[1]);
-                    resp.resultPutUnsignedInt(id[2]);
-                    break;
-                case MAINBOARD_GET_FW_VERSION:
-                    resp.resultPutLong(MAINBOARD_FW_VERSION);
-                    break;
-                case MAINBOARD_GET_HW_VERSION:
-                    resp.resultPutLong(MAINBOARD_HW_VERSION);
-                    break;
-                case MAINBOARD_LIST_FEEDERS:
-                    for (byte i = 0; i < 64; i++) {
-                        if (feeders[i] != null) resp.resultPutUnsignedByte(i);
+                }
+                break;
+            case MAINBOARD_GET_ERROR:
+                resp.resultPutUnsignedByte(mainboard.getError().getCode());
+                break;
+            case MAINBOARD_GET_ID:
+                int[] id = mainboard.getId();
+                resp.resultPutUnsignedInt(id[0]);
+                resp.resultPutUnsignedInt(id[1]);
+                resp.resultPutUnsignedInt(id[2]);
+                break;
+            case MAINBOARD_GET_FW_VERSION:
+                resp.resultPutLong(MAINBOARD_FW_VERSION);
+                break;
+            case MAINBOARD_GET_HW_VERSION:
+                resp.resultPutLong(MAINBOARD_HW_VERSION);
+                break;
+            case MAINBOARD_LIST_FEEDERS:
+                for (byte i = 0; i < 64; i++) {
+                    if (feeders[i] != null) resp.resultPutUnsignedByte(i);
+                }
+                break;
+            case MAINBOARD_LIST_ALL_FEEDER_STATUS:
+                for (byte i = 0; i < 64; i++) {
+                    if (feeders[i] != null) {
+                        resp.resultPutUnsignedByte(feeders[i].getStatus().getCode());
                     }
-                    break;
-                case MAINBOARD_LIST_ALL_FEEDER_STATUS:
-                    for (byte i = 0; i < 64; i++) {
-                        if (feeders[i] != null) {
-                            resp.resultPutUnsignedByte(feeders[i].getStatus().getCode());
-                        }
+                }
+                break;
+            case MAINBOARD_LIST_ALL_FEEDER_ERROR:
+                for (byte i = 0; i < 64; i++) {
+                    if (feeders[i] != null) {
+                        resp.resultPutUnsignedByte(feeders[i].getError().getCode());
                     }
-                    break;
-                case MAINBOARD_LIST_ALL_FEEDER_ERROR:
-                    for (byte i = 0; i < 64; i++) {
-                        if (feeders[i] != null) {
-                            resp.resultPutUnsignedByte(feeders[i].getError().getCode());
-                        }
-                    }
-                    break;
-                case MAINBOARD_NOP:
-                    resp.resultPutUnsignedByte((short) 0);
-                    break;
-                case MAINBOARD_RESET_ERROR:
-                    mainboard.setError(SystemError.NO_ERROR);
-                    resp.resultPutUnsignedByte((short) 0);
-                    break;
-                case MAINBOARD_FORCE_ERROR:
-                    mainboard.setError(SystemError.USER_CAUSED);
-                    resp.setError(mainboard.getError());
-                    break;
-                case MAINBOARD_RUN_SELF_TEST:
-                    resp.resultPutUnsignedByte((short) 0);
-                    break;
-                case MAINBOARD_HW_RESET:
-                    resp.resultPutUnsignedByte((short) 0);
-                    break;
-                case FEEDER_SET_REMAINING_PARTS:
-                case FEEDER_SET_TOTAL_PARTS:
-                case FEEDER_SET_PART_PITCH:
-                case FEEDER_SET_FEED_SPEED:
-                case FEEDER_SET_LOW_PARTS_WARNING_THRESHOLD:
-                case FEEDER_SET_SHORT_ID:
-                case FEEDER_SET_LONG_ID:
-                case FEEDER_SET_DISPLAY_BRIGHTNESS:
-                case FEEDER_SET_MOTOR_DIRECTION:
-                case FEEDER_SET_MOTOR_SLOWDOWN_DELAY:
-                case FEEDER_GET_ID:
-                case FEEDER_GET_FW_VERSION:
-                case FEEDER_GET_HW_VERSION:
-                case FEEDER_GET_REMAINING_PARTS:
-                case FEEDER_GET_TOTAL_PARTS:
-                case FEEDER_GET_LOW_PARTS_WARNING_THRESHOLD:
-                case FEEDER_GET_SHORT_ID:
-                case FEEDER_GET_LONG_ID:
-                case FEEDER_GET_MOTOR_SLOWDOWN_DELAY:
-                case FEEDER_GET_TOTAL_FEEDS:
-                case FEEDER_GET_PROTOCOL_VERSION:
-                case FEEDER_GET_STATUS:
-                case FEEDER_GET_ERROR:
-                case FEEDER_GET_PART_PITCH:
-                case FEEDER_GET_FEED_SPEED:
-                case FEEDER_GET_DISPLAY_BRIGHTNESS:
-                case FEEDER_GET_MOTOR_DIRECTION:
-                case FEEDER_NOP:
-                case FEEDER_FEED:
-                case FEEDER_RESET_ERROR:
-                case FEEDER_FORCE_ERROR:
-                case FEEDER_RUN_SELF_TEST:
-                case FEEDER_HW_RESET:
-                    try {
-                        parseFeeder(req, resp);
-                    } catch (InvalidDataException e) {
-                        resp.setError(SystemError.INVALID_INPUT);
-                    }
-                    break;
-                default:
-                    return null;
-            }
+                }
+                break;
+            case MAINBOARD_NOP:
+            case MAINBOARD_RUN_SELF_TEST:
+            case MAINBOARD_HW_RESET:
+                resp.resultPutUnsignedByte((short) 0);
+                break;
+            case MAINBOARD_RESET_ERROR:
+                mainboard.setError(SystemError.NO_ERROR);
+                resp.resultPutUnsignedByte((short) 0);
+                break;
+            case MAINBOARD_FORCE_ERROR:
+                mainboard.setError(SystemError.USER_CAUSED);
+                resp.setError(mainboard.getError());
+                break;
+            case FEEDER_SET_REMAINING_PARTS:
+            case FEEDER_SET_TOTAL_PARTS:
+            case FEEDER_SET_PART_PITCH:
+            case FEEDER_SET_FEED_SPEED:
+            case FEEDER_SET_LOW_PARTS_WARNING_THRESHOLD:
+            case FEEDER_SET_SHORT_ID:
+            case FEEDER_SET_LONG_ID:
+            case FEEDER_SET_DISPLAY_BRIGHTNESS:
+            case FEEDER_SET_MOTOR_DIRECTION:
+            case FEEDER_SET_MOTOR_SLOWDOWN_DELAY:
+            case FEEDER_GET_ID:
+            case FEEDER_GET_FW_VERSION:
+            case FEEDER_GET_HW_VERSION:
+            case FEEDER_GET_REMAINING_PARTS:
+            case FEEDER_GET_TOTAL_PARTS:
+            case FEEDER_GET_LOW_PARTS_WARNING_THRESHOLD:
+            case FEEDER_GET_SHORT_ID:
+            case FEEDER_GET_LONG_ID:
+            case FEEDER_GET_MOTOR_SLOWDOWN_DELAY:
+            case FEEDER_GET_TOTAL_FEEDS:
+            case FEEDER_GET_PROTOCOL_VERSION:
+            case FEEDER_GET_STATUS:
+            case FEEDER_GET_ERROR:
+            case FEEDER_GET_PART_PITCH:
+            case FEEDER_GET_FEED_SPEED:
+            case FEEDER_GET_DISPLAY_BRIGHTNESS:
+            case FEEDER_GET_MOTOR_DIRECTION:
+            case FEEDER_NOP:
+            case FEEDER_FEED:
+            case FEEDER_RESET_ERROR:
+            case FEEDER_FORCE_ERROR:
+            case FEEDER_RUN_SELF_TEST:
+            case FEEDER_HW_RESET:
+                try {
+                    parseFeeder(req, resp);
+                } catch (InvalidDataException e) {
+                    resp.setError(SystemError.INVALID_INPUT);
+                }
+                break;
+            default:
+                return null;
         }
         if (req.getId() > 0) {
             return resp;
@@ -175,7 +170,7 @@ public class DummyHardware {
         long dataLong = 0;
         if (req instanceof JRpcRequest) {
             JRpcRequest request = (JRpcRequest)req;
-            if (request.getOrderedData().length() > 1) {
+            if (request.getOrderedData().length() > 0) {
                 feeder = (byte)request.getOrderedData().optInt(0, -1);
                 dataString = request.getOrderedData().optString(1, "");
                 dataLong = request.getOrderedData().optLong(1, 0);
@@ -191,7 +186,7 @@ public class DummyHardware {
             resp.setError(SystemError.NO_FEEDER);
             return;
         }
-        if (feeder < 1) {
+        if (feeder < 0) {
             resp.setError(SystemError.NO_FEEDER);
             return;
         }
@@ -278,7 +273,11 @@ public class DummyHardware {
                 resp.resultPutUnsignedByte(FEEDER_PROTO_VERSION);
                 break;
             case FEEDER_GET_STATUS:
-                resp.resultPutUnsignedByte(f.getStatus().getCode());
+                if (f.getError() != SystemError.NO_ERROR) {
+                    resp.resultPutUnsignedByte(Status.ERROR.getCode());
+                } else {
+                    resp.resultPutUnsignedByte(f.getStatus().getCode());
+                }
                 break;
             case FEEDER_GET_ERROR:
                 resp.resultPutUnsignedByte(f.getError().getCode());

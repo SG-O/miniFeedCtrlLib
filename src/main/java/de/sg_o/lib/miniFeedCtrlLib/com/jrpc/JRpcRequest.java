@@ -2,18 +2,19 @@ package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Method;
 import de.sg_o.lib.miniFeedCtrlLib.com.Request;
+import de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidParameterException;
-import java.util.Arrays;
 import java.util.Objects;
+
+import static de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType.LONG;
+import static de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType.parseType;
 
 public class JRpcRequest extends Request {
     private JSONObject data = new JSONObject();
@@ -47,6 +48,41 @@ public class JRpcRequest extends Request {
 
     public void setNamedDataOutput(boolean namedDataOutput) {
         this.namedDataOutput = namedDataOutput;
+    }
+
+    @Override
+    public MessageDataType getDataType(String key, int index) {
+        if (index < this.orderedData.length()) {
+            return parseType(this.orderedData.opt(index));
+        }
+        if (this.data.has(key)) {
+            return parseType(this.data);
+        }
+        return null;
+    }
+
+    @Override
+    public long getDataAsLong(String key, int index) {
+        if (getDataType(key, index) != MessageDataType.LONG) return -1;
+        if (index < this.orderedData.length()) {
+            return this.orderedData.optLong(index, -1);
+        }
+        if (this.data.has(key)) {
+            return this.data.optLong(key, -1);
+        }
+        return -1;
+    }
+
+    @Override
+    public String getDataAsString(String key, int index) {
+        if (getDataType(key, index) != MessageDataType.STRING) return null;
+        if (index < this.orderedData.length()) {
+            return this.orderedData.optString(index);
+        }
+        if (this.data.has(key)) {
+            return this.data.optString(key);
+        }
+        return null;
     }
 
     public JSONObject getData() {
