@@ -182,7 +182,7 @@ public class Feeder {
     public String getLongPartID() {
         if (longPartID == null) return "-";
         if (longPartID.length() < 1) return "";
-        if (longPartID.length() > 5) return longPartID.substring(0, 127);
+        if (longPartID.length() > 126) return longPartID.substring(0, 127);
         return longPartID;
     }
 

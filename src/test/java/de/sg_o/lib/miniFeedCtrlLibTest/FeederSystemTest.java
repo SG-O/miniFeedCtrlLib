@@ -137,7 +137,7 @@ class FeederSystemTest {
         }
         assertEquals(Status.READY, feeders[2].getStatus());
         assertEquals(SystemError.NO_ERROR, feeders[2].getError());
-        assertEquals("89ABCDEFFFFFFFFF00000000", ByteArray.intsToHex(feeders[2].getId()));
+        assertEquals("89ABCDEFFFFFFFFF00000002", ByteArray.intsToHex(feeders[2].getId()));
         assertEquals(0, feeders[2].getTotalParts());
         feeders[2].setTotalParts(100);
         assertEquals(100, feeders[2].getTotalParts());
@@ -207,7 +207,7 @@ class FeederSystemTest {
         }
         assertEquals(Status.READY, feeders[2].getStatus());
         assertEquals(SystemError.NO_ERROR, feeders[2].getError());
-        assertEquals("89ABCDEFFFFFFFFF00000000", ByteArray.intsToHex(feeders[2].getId()));
+        assertEquals("89ABCDEFFFFFFFFF00000002", ByteArray.intsToHex(feeders[2].getId()));
         assertEquals(100, feeders[2].getTotalParts());
         feeders[2].setTotalParts(1000);
         assertEquals(1000, feeders[2].getTotalParts());

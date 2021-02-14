@@ -16,6 +16,8 @@ public class FeederSystem {
     private IO io;
     private String port;
     private boolean namedOutput = false;
+    private int timeout = 1000;
+    private Transaction feederUpdate;
 
     private Mainboard mainboard;
     private Mainboard mainboardBackup;
@@ -59,6 +61,14 @@ public class FeederSystem {
             feederList.add(f);
         }
         return feederList.toArray(new Feeder[0]);
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+        this.timeout = timeout;
     }
 
     public boolean setIO(String port) {
@@ -127,6 +137,7 @@ public class FeederSystem {
     public void runRegularTasks() {
         if (!isConnected()) return;
         io.sendNext();
+        io.getHandler().CheckTimeouts(timeout);
         parse();
     }
 
@@ -339,7 +350,10 @@ public class FeederSystem {
 
     public void updateConnectedFeeders() {
         if (!isConnected()) return;
-        MainboardMethods.ListFeeders(this.io.getHandler(), namedOutput);
+        if (feederUpdate != null) {
+            if (!(feederUpdate.isDone() || feederUpdate.hasFailed())) return;
+        }
+        feederUpdate = MainboardMethods.ListFeeders(this.io.getHandler(), namedOutput);
     }
 
     public void requestAllFeederParameters(byte slot) {

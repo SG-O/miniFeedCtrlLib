@@ -58,6 +58,9 @@ public class DummyConnection {
                 f = new Feeder(new int[] {0x89ABCDEF, 0xFFFFFFFF, feederNumber}, (byte)feederSlot);
                 f.setStatus(Status.READY);
                 f.setError(SystemError.NO_ERROR);
+                f.setShortPartID("D"+ feederNumber);
+                f.setLongPartID("Dummy Part " + feederSlot);
+                feederNumber++;
             } catch (InvalidDataException ignore) {
                 continue;
             }
