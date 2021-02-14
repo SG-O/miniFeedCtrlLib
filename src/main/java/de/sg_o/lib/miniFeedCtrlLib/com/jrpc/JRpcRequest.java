@@ -1,8 +1,25 @@
+/*
+ *
+ * Copyright 2021 SG-O (Joerg Bayer)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.sg_o.lib.miniFeedCtrlLib.com.jrpc;
 
+import de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType;
 import de.sg_o.lib.miniFeedCtrlLib.com.Method;
 import de.sg_o.lib.miniFeedCtrlLib.com.Request;
-import de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +30,6 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-import static de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType.LONG;
 import static de.sg_o.lib.miniFeedCtrlLib.com.MessageDataType.parseType;
 
 public class JRpcRequest extends Request {
@@ -28,8 +44,9 @@ public class JRpcRequest extends Request {
     public JRpcRequest(byte[] msg) {
         super(-1, Method.UNKNOWN);
         if (msg == null) throw new NullPointerException();
-        String msgStrg = new String(msg, StandardCharsets.ISO_8859_1);
-        JSONObject msgObj = new JSONObject(msgStrg);
+        String msgString = new String(msg, StandardCharsets.ISO_8859_1);
+        JSONObject msgObj = new JSONObject(msgString);
+        //noinspection SpellCheckingInspection
         if (!msgObj.has("jsonrpc")) throw new JSONException("Not a JSON RPC message");
         if (!msgObj.has("method")) throw new JSONException("Not a JSON RPC request");
         super.setMethod(Method.fromMethod(msgObj.getString("method")));
@@ -143,6 +160,7 @@ public class JRpcRequest extends Request {
 
     public JSONObject generateJSON() {
         final JSONObject msg = new JSONObject();
+        //noinspection SpellCheckingInspection
         msg.put("jsonrpc", "2.0");
         msg.put("method", super.getMethod().getMethod());
         if (this.namedDataOutput) {

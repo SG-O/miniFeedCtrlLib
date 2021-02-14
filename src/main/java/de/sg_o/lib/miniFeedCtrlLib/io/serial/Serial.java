@@ -1,3 +1,20 @@
+/*
+ *
+ * Copyright 2021 SG-O (Joerg Bayer)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.sg_o.lib.miniFeedCtrlLib.io.serial;
 
 import com.fazecast.jSerialComm.SerialPort;
@@ -8,6 +25,7 @@ import de.sg_o.lib.miniFeedCtrlLib.io.IO;
 
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("unused")
 public class Serial extends IO {
     public static final String PREFIX = "serial";
 
@@ -31,7 +49,7 @@ public class Serial extends IO {
         SerialPort[] ports = SerialPort.getCommPorts();
         String[] portNames = new String[ports.length];
         for (int i = 0; i < ports.length; i++) {
-            portNames[i] = PREFIX + SEPERATOR + ports[i].getSystemPortName();
+            portNames[i] = PREFIX + SEPARATOR + ports[i].getSystemPortName();
         }
         return portNames;
     }
@@ -44,7 +62,7 @@ public class Serial extends IO {
     @Override
     public synchronized boolean connect(String port) {
         if (isConnected()) return false;
-        String[] split = port.split(SEPERATOR);
+        String[] split = port.split(SEPARATOR);
         if (split.length != 2) return false;
         if (!split[0].equalsIgnoreCase(PREFIX)) return false;
         serialPort = SerialPort.getCommPort(split[1]);
@@ -131,9 +149,8 @@ public class Serial extends IO {
                         System.arraycopy(buffer, start, msg, 0, length);
                         System.arraycopy(buffer, i + 1, newBuf, 0, newBuf.length);
                         this.buffer = newBuf;
-                        i = -1;
-                        String msgStrg = new String(msg, StandardCharsets.ISO_8859_1);
-                        super.putOnConsole(msgStrg, false);
+                        String msgString = new String(msg, StandardCharsets.ISO_8859_1);
+                        super.putOnConsole(msgString, false);
                         return super.getHandler().parseResponse(msg);
                     }
                     i++;

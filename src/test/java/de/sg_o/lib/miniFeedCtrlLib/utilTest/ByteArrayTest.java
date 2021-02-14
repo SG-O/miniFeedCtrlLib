@@ -1,3 +1,20 @@
+/*
+ *
+ * Copyright 2021 SG-O (Joerg Bayer)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.sg_o.lib.miniFeedCtrlLib.utilTest;
 
 import de.sg_o.lib.miniFeedCtrlLib.util.ByteArray;
@@ -8,6 +25,7 @@ import java.util.Random;
 import static de.sg_o.lib.miniFeedCtrlLib.util.ByteArray.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("FieldCanBeLocal")
 class ByteArrayTest {
     private final byte[] b0 = {0, 1, 2, 3};
     private final byte[] b1 = {9, 10, 127, -1};
@@ -23,14 +41,17 @@ class ByteArrayTest {
     private final String s1 = "090A7FFF";
     private final String s2 = "";
     private final String s3 = "499602D23ADE68B1BDC5CA39";
+    @SuppressWarnings("SpellCheckingInspection")
     private final String s4 = "000000010000000200000003FFFFFFFF";
 
     @Test
     public void byteArrayTest() {
+        //noinspection InstantiationOfUtilityClass
         ByteArray b = new ByteArray();
         assertNotNull(b);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void bytesToHexTest() {
         assertEquals(s0, bytesToHex(b0));
@@ -39,6 +60,7 @@ class ByteArrayTest {
         assertEquals(s2, bytesToHex(b3));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void intsToHexTest() {
         assertEquals(s3, intsToHex(i0));
@@ -55,6 +77,7 @@ class ByteArrayTest {
         assertArrayEquals(b2, hexToBytes(s2));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void appendTest() {
         byte[] b4 = {0, 1, 2, 3, 9, 10, 127, -1};
@@ -76,10 +99,12 @@ class ByteArrayTest {
         byte[] o5 = toBytes(0, 9);
         byte[] o6 = toBytes(0, -5);
 
+        //noinspection SpellCheckingInspection
         assertEquals("FFFFFFFFFFFFFFFF", bytesToHex(o0));
         assertEquals(-1, fromBytes(o0));
         assertEquals("0000000000002710", bytesToHex(o1));
         assertEquals(10000, fromBytes(o1));
+        //noinspection SpellCheckingInspection
         assertEquals("7FFFFFFFFFFFFFFF", bytesToHex(o2));
         assertEquals(Long.MAX_VALUE, fromBytes(o2));
         assertEquals("8000000000000000", bytesToHex(o3));

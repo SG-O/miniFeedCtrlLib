@@ -1,3 +1,20 @@
+/*
+ *
+ * Copyright 2021 SG-O (Joerg Bayer)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.sg_o.lib.miniFeedCtrlLib.common;
 
 import de.sg_o.lib.miniFeedCtrlLib.com.Method;
@@ -5,6 +22,7 @@ import de.sg_o.lib.miniFeedCtrlLib.com.Transaction;
 import de.sg_o.lib.miniFeedCtrlLib.com.TransactionHandler;
 import de.sg_o.lib.miniFeedCtrlLib.com.Request;
 
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class FeederMethods {
     public static Transaction GetFeederFwVer(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
@@ -118,7 +136,7 @@ public class FeederMethods {
         return handler.putRequest(request);
     }
 
-    public static Transaction GetFeederDispBright(TransactionHandler handler, byte slot, boolean namedDataOutput) {
+    public static Transaction GetFeederDisplayBrightness(TransactionHandler handler, byte slot, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         Request request = handler.generateRequest(Method.FEEDER_GET_DISPLAY_BRIGHTNESS);
         request.setNamedDataOutput(namedDataOutput);
@@ -204,7 +222,7 @@ public class FeederMethods {
         return handler.putRequest(request);
     }
 
-    public static Transaction SetFeederDispBright(TransactionHandler handler, byte slot, short displayBrightness, boolean namedDataOutput) {
+    public static Transaction SetFeederDisplayBrightness(TransactionHandler handler, byte slot, short displayBrightness, boolean namedDataOutput) {
         if ((slot > 63) || (slot < 0)) return null;
         if ((displayBrightness < 1) || (displayBrightness > 255)) return null;
         Request request = handler.generateRequest(Method.FEEDER_SET_DISPLAY_BRIGHTNESS);

@@ -1,7 +1,25 @@
+/*
+ *
+ * Copyright 2021 SG-O (Joerg Bayer)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.sg_o.lib.miniFeedCtrlLib.com;
 
 import java.util.HashMap;
 
+@SuppressWarnings("unused")
 public enum Method {
     MAINBOARD_GET_PROTOCOL_VERSION((short) (192 + 256), "GetMainboardProtoVer", false, MessageDataType.LONG),
     MAINBOARD_GET_STATUS((short) (193 + 256), "GetMainboardStatus", false, MessageDataType.LONG),
@@ -27,10 +45,12 @@ public enum Method {
     FEEDER_SET_LOW_PARTS_WARNING_THRESHOLD((short) 4, "SetFeederLowWarn", true, MessageDataType.LONG),
     FEEDER_SET_SHORT_ID((short) 5, "SetFeederShortID", true, MessageDataType.LONG),
     FEEDER_SET_LONG_ID((short) 6, "SetFeederLongID", true, MessageDataType.LONG),
+    @SuppressWarnings("SpellCheckingInspection")
     FEEDER_SET_DISPLAY_BRIGHTNESS((short) 7, "SetFeederDispBright", true, MessageDataType.LONG),
     FEEDER_SET_MOTOR_DIRECTION((short) 8, "SetFeederMotDir", true, MessageDataType.LONG),
     FEEDER_SET_MOTOR_SLOWDOWN_DELAY((short) 9, "SetFeederMotSlowDelay", true, MessageDataType.LONG),
 
+    @SuppressWarnings("PointlessArithmeticExpression")
     FEEDER_GET_ID((short) (0 + 256), "GetFeederID", false, MessageDataType.ARRAY),
     FEEDER_GET_FW_VERSION((short) (1 + 256), "GetFeederFwVer", false, MessageDataType.LONG),
     FEEDER_GET_HW_VERSION((short) (2 + 256), "GetFeederHwVer", false, MessageDataType.LONG),
@@ -47,6 +67,7 @@ public enum Method {
     FEEDER_GET_ERROR((short) (130 + 256), "GetFeederError", false, MessageDataType.LONG),
     FEEDER_GET_PART_PITCH((short) (131 + 256), "GetFeederPartPitch", false, MessageDataType.LONG),
     FEEDER_GET_FEED_SPEED((short) (132 + 256), "GetFeederFeedSpeed", false, MessageDataType.LONG),
+    @SuppressWarnings("SpellCheckingInspection")
     FEEDER_GET_DISPLAY_BRIGHTNESS((short) (133 + 256), "GetFeederDispBright", false, MessageDataType.LONG),
     FEEDER_GET_MOTOR_DIRECTION((short) (134 + 256), "GetFeederMotDir", false, MessageDataType.LONG),
 
@@ -59,10 +80,10 @@ public enum Method {
 
     UNKNOWN((short)1024, "Unknown", true, MessageDataType.NULL);
 
-    private short opcode;
-    private String method;
-    private boolean write;
-    private MessageDataType result;
+    private final short opcode;
+    private final String method;
+    private final boolean write;
+    private final MessageDataType result;
 
     private static final HashMap<Short, Method> opcodeMap = new HashMap<>();
     private static final HashMap<String, Method> methodMap = new HashMap<>();
