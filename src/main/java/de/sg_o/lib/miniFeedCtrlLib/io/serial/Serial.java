@@ -15,7 +15,7 @@ public class Serial extends IO {
     byte[] buffer = new byte[0];
 
     int baudRate = 115200;
-
+    Transaction running;
 
     public Serial(TransactionHandler handler) {
         super(handler);
@@ -79,10 +79,16 @@ public class Serial extends IO {
     @Override
     public synchronized boolean sendNext() {
         if (!isConnected()) return false;
+        if (running != null) {
+            if (!(running.isDone() || running.hasFailed())) {
+                return false;
+            }
+        }
         Transaction t = super.getHandler().getNextToSend();
         if (t == null) return false;
         if (t.isDone()) return false;
         if (t.getRequest() != null) {
+            running = t;
             if (t.getRequest() instanceof JRpcRequest) {
                 super.putOnConsole(((JRpcRequest)t.getRequest()).generateString(), true);
             }
@@ -107,7 +113,6 @@ public class Serial extends IO {
             this.buffer = buf;
         }
         if (buffer.length < 2) return null;
-        System.out.println(new String(buffer, StandardCharsets.ISO_8859_1));
         for (int i = 0; i < buffer.length; i++) {
             if (buffer[i] != '{') {
                 while (i < buffer.length) {

@@ -26,6 +26,8 @@ public class FeederSystem {
     private final DummySerial ds;
     private final Serial serial;
 
+    private Transaction requestMainboardID;
+
     public FeederSystem(TransactionHandler handler) {
         this.ds = DummyConnection.createDummyConnection();
         this.serial = new Serial(handler);
@@ -121,7 +123,11 @@ public class FeederSystem {
             if (!connect()) return false;
         }
         clean();
-        MainboardMethods.GetMainboardID(this.io.getHandler(), namedOutput);
+        if (requestMainboardID == null) {
+            requestMainboardID = MainboardMethods.GetMainboardID(this.io.getHandler(), namedOutput);
+        } else if (requestMainboardID.hasFailed() || requestMainboardID.isDone()) {
+            requestMainboardID = MainboardMethods.GetMainboardID(this.io.getHandler(), namedOutput);
+        }
         return true;
     }
 
@@ -138,6 +144,13 @@ public class FeederSystem {
         if (!isConnected()) return;
         io.sendNext();
         io.getHandler().CheckTimeouts(timeout);
+        if (mainboard == null) {
+            if (requestMainboardID == null) {
+                requestMainboardID = MainboardMethods.GetMainboardID(this.io.getHandler(), namedOutput);
+            } else if (requestMainboardID.hasFailed() || requestMainboardID.isDone()) {
+                requestMainboardID = MainboardMethods.GetMainboardID(this.io.getHandler(), namedOutput);
+            }
+        }
         parse();
     }
 

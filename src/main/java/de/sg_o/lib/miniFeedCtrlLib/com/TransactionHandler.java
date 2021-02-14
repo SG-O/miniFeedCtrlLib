@@ -1,6 +1,7 @@
 package de.sg_o.lib.miniFeedCtrlLib.com;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -23,8 +24,8 @@ public abstract class TransactionHandler {
             }
             return trans;
         }
-        if (transactions.containsKey(request.getId())) return null;
         synchronized(this) {
+            if (transactions.containsKey(request.getId())) return null;
             toSend.add(trans);
             transactions.put(trans.getId(), trans);
         }
@@ -57,13 +58,17 @@ public abstract class TransactionHandler {
 
     public void CheckTimeouts(long timeout) {
         synchronized(this) {
-            for (Map.Entry<Integer, Transaction> entry : transactions.entrySet()) {
-                if (entry.getValue().isDone()) {
-                    transactions.remove(entry.getKey());
+            Iterator<Map.Entry<Integer, Transaction>> it = transactions.entrySet().iterator();
+            Map.Entry<Integer, Transaction> item;
+            while (it.hasNext()) {
+                item = it.next();
+                if (item == null) continue;
+                if (item.getValue().isDone()) {
+                    it.remove();
                 }
-                if (entry.getValue().getElapsedTime() > timeout) {
-                    entry.getValue().fail();
-                    transactions.remove(entry.getKey());
+                if (item.getValue().getElapsedTime() > timeout) {
+                    item.getValue().fail();
+                    it.remove();
                 }
             }
         }
