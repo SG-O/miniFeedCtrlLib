@@ -21,13 +21,13 @@ package de.sg_o.lib.miniFeedCtrlLib.com;
 public class Transaction {
     private final Request request;
     private Response response;
-    private final long startTime;
+    private long startTime;
     private boolean failed = false;
 
     public Transaction(Request request) {
         this.request = request;
         this.response = null;
-        this.startTime = System.currentTimeMillis();
+        this.startTime = 0;
     }
 
     public Request getRequest() {
@@ -44,7 +44,12 @@ public class Transaction {
     }
 
     public long getElapsedTime() {
+        if (startTime == 0L) return 0;
         return System.currentTimeMillis() - startTime;
+    }
+
+    public void startTimer() {
+        this.startTime = System.currentTimeMillis();
     }
 
     public boolean isDone() {

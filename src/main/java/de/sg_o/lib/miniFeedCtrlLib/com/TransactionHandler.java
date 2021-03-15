@@ -70,7 +70,9 @@ public abstract class TransactionHandler {
     public Transaction getNextToSend() {
         synchronized(this) {
             if (toSend.size() < 1) return null;
-            return toSend.remove();
+            Transaction next = toSend.remove();
+            next.startTimer();
+            return next;
         }
     }
 

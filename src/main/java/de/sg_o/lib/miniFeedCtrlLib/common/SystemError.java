@@ -17,70 +17,73 @@
 
 package de.sg_o.lib.miniFeedCtrlLib.common;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum SystemError {
     NO_ERROR((short)0),
     UNKNOWN_ERROR((short)1),
-    MOTOR_STALL((short)2),
-    CONFIGURATION_ERROR((short)3),
-    OUT_OF_COMPONENTS((short)4),
-    NO_TAPE((short)5),
-    HARDWARE_FAILURE((short)6),
-    POWER_FAILURE((short)7),
-    WDT_RESET((short)8),
-    INITIALISATION_FAILURE((short)9),
-    INVALID_INPUT((short)10),
-    UNKNOWN_METHOD((short)11),
-    USER_CAUSED((short)12),
-    CRC_ERROR((short)13),
-    BUSY_EXECUTION_ERROR((short)14),
-    NO_FEEDER((short)15),
-    PARSE_ERROR((short) 16),
+    HARDWARE_FAILURE((short)2),
+    POWER_FAILURE((short)3),
+    WDT_RESET((short)4),
+    INITIALISATION_FAILURE((short)5),
+    INVALID_INPUT((short)6),
+    UNKNOWN_METHOD((short)7),
+    USER_CAUSED((short)8),
+    CRC_ERROR((short)9),
+    BUSY_EXECUTION_ERROR((short)10),
+    PARSER((short)11),
+
+    MOTOR_STALL((short)32),
+    CONFIGURATION_ERROR((short)33),
+    OUT_OF_COMPONENTS((short)34),
+    NO_TAPE((short)35),
+    STORAGE_INITIALISATION((short)36),
+    INVALID_STORAGE_HEADER((short)37),
+    STORAGE_WRITE_ERROR((short)38),
+    TOO_MANY_CONFIG_WRITES((short)39),
+    TOO_MANY_COUNTER_WRITES((short)40),
+
+    NO_FEEDER((short)64),
+
+    DEBUG_00((short)128),
+    DEBUG_01((short)129),
+    DEBUG_02((short)130),
+    DEBUG_03((short)131),
+    DEBUG_04((short)132),
+    DEBUG_05((short)133),
+    DEBUG_06((short)134),
+    DEBUG_07((short)135),
+    DEBUG_08((short)136),
+    DEBUG_09((short)137),
+    DEBUG_10((short)138),
+    DEBUG_11((short)139),
+    DEBUG_12((short)140),
+    DEBUG_13((short)141),
+    DEBUG_14((short)142),
+    DEBUG_15((short)143),
+
     UNKNOWN((short)254);
 
     private final short code;
+    private static final Map<Short, SystemError> fromCodeMap = new HashMap<>();
+
+    static {
+        for (SystemError error : SystemError.values()) {
+            fromCodeMap.put(error.getCode(), error);
+        }
+    }
 
     SystemError(short code) {
         this.code = code;
     }
 
     public static SystemError fromCode(short code) {
-        switch (code) {
-            case 0:
-                return NO_ERROR;
-            case 1:
-                return UNKNOWN_ERROR;
-            case 2:
-                return MOTOR_STALL;
-            case 3:
-                return CONFIGURATION_ERROR;
-            case 4:
-                return OUT_OF_COMPONENTS;
-            case 5:
-                return NO_TAPE;
-            case 6:
-                return HARDWARE_FAILURE;
-            case 7:
-                return POWER_FAILURE;
-            case 8:
-                return WDT_RESET;
-            case 9:
-                return INITIALISATION_FAILURE;
-            case 10:
-                return INVALID_INPUT;
-            case 11:
-                return UNKNOWN_METHOD;
-            case 12:
-                return USER_CAUSED;
-            case 13:
-                return CRC_ERROR;
-            case 14:
-                return BUSY_EXECUTION_ERROR;
-            case 15:
-                return NO_FEEDER;
-            case 16:
-                return PARSE_ERROR;
+        SystemError error = fromCodeMap.get(code);
+        if (error == null) {
+            return UNKNOWN;
         }
-        return UNKNOWN;
+        return error;
     }
 
     public short getCode() {

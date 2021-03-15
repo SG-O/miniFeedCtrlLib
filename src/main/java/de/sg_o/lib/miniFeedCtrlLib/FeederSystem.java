@@ -213,7 +213,7 @@ public class FeederSystem {
                 try {
                     MainboardParser.parseMainboardUpdate(t, mainboard, mainboardBackup);
                 } catch (InvalidDataException e) {
-                    this.mainboard.setError(SystemError.PARSE_ERROR);
+                    this.mainboard.setError(SystemError.PARSER);
                 }
                 break;
             case MAINBOARD_LIST_FEEDERS:
@@ -222,11 +222,16 @@ public class FeederSystem {
                     return;
                 }
                 Response resp = t.getResponse();
-                if (resp.getResultType() != MessageDataType.ARRAY) {
-                    this.mainboard.setError(SystemError.PARSE_ERROR);
+                byte[] slots = new byte[1];
+                if (resp.getResultType() == MessageDataType.LONG) {
+                    slots[0] = (byte)(resp.getResultAsLong() & 0x7F);
+                } else if (resp.getResultType() == MessageDataType.ARRAY) {
+                    slots = resp.getResultAsByteArray();
+                } else {
+                    this.mainboard.setError(SystemError.PARSER);
                     return;
                 }
-                byte[] slots = resp.getResultAsByteArray();
+
                 HashSet<Byte> slotSet = new HashSet<>(slots.length);
                 for (byte slot: slots) {
                     if (slot < 0 || slot > 63) continue;
@@ -277,7 +282,7 @@ public class FeederSystem {
                         }
                     }
                 } catch (InvalidDataException e) {
-                    this.mainboard.setError(SystemError.PARSE_ERROR);
+                    this.mainboard.setError(SystemError.PARSER);
                 }
                 break;
             case FEEDER_GET_ID:
@@ -300,7 +305,7 @@ public class FeederSystem {
                     feeder[slot] = new Feeder(id, slot);
                     feederBackup[slot] = new Feeder(id, slot);
                 } catch (InvalidDataException e) {
-                    this.mainboard.setError(SystemError.PARSE_ERROR);
+                    this.mainboard.setError(SystemError.PARSER);
                 }
                 break;
             case FEEDER_GET_FW_VERSION:
@@ -329,11 +334,11 @@ public class FeederSystem {
                         FeederParser.parseFeederUpdate(t, feeder[slot], feederBackup[slot]);
                     }
                 } catch (InvalidDataException e) {
-                    this.mainboard.setError(SystemError.PARSE_ERROR);
+                    this.mainboard.setError(SystemError.PARSER);
                 }
                 break;
             default:
-                this.mainboard.setError(SystemError.PARSE_ERROR);
+                this.mainboard.setError(SystemError.PARSER);
         }
     }
 
